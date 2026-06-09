@@ -286,7 +286,7 @@ body {
         <div class="title-sub">〜 U さんの挑戦 〜</div>
         <div class="title-card">
             <strong>Uさん</strong>は少しASDっぽい特性があり、緊張すると<br>
-            <span class="meme-tag">野獣先輩の語録</span> でコミュニケーションをとってしまいます。<br><br>
+            <span class="meme-tag">某ネット有名人の語録</span> でコミュニケーションをとってしまいます。<br><br>
             しかし、フォーマルな場ではそれは通用しません。<br><br>
             あなたはUさんを助けて、<span class="good-tag">場に応じた適切な返答</span> を<br>
             選んであげてください！
@@ -359,14 +359,14 @@ const SCENES = [
     choiceQ: "⚡ Uさん、どう答える？",
     choices: [
       {
-        type:"bad", label:"「やらないか？」", sub:"野獣先輩語録でキメる",
+        type:"bad", label:"「やらないか？」", sub:"某ネット有名人の語録でキメる",
         after:[
           { spk:"Uさん",  side:"R", text:"やらないか？" },
           { spk:"上司",   side:"L", text:"え……？" },
           { spk:"同僚",   side:"L", text:"（ひそひそ）ちょっと、何言ってんの……？" },
           { spk:"上司",   side:"L", text:"Uさん、ここは会議室ですよ。真剣にお願いします。" },
         ],
-        explain:"「やらないか」はインターネットミームの語録です。\nビジネスの場では全く意味が通じず、真剣さを欠いているという\n印象を与え、信頼を大きく失います。",
+        explain:"「やらないか」はネット上で有名な某人物の語録です。\nビジネスの場では全く意味が通じず、真剣さを欠いているという\n印象を与え、信頼を大きく失います。",
         tip: null
       },
       {
@@ -394,7 +394,7 @@ const SCENES = [
     choiceQ: "⚡ 志望動機を答えよう！",
     choices: [
       {
-        type:"bad", label:"「はい、論破」", sub:"野獣先輩語録で返す",
+        type:"bad", label:"「はい、論破」", sub:"某ネット有名人の語録で返す",
         after:[
           { spk:"Uさん",  side:"R", text:"はい、論破。" },
           { spk:"面接官", side:"L", text:"……？　何を、論破されたのでしょうか？" },
@@ -429,7 +429,7 @@ const SCENES = [
     choiceQ: "⚡ 教授の質問、どう返す？",
     choices: [
       {
-        type:"bad", label:"「なんでそういうことを言うんですか」", sub:"野獣先輩風に反発する",
+        type:"bad", label:"「なんでそういうことを言うんですか」", sub:"某ネット有名人の語録風に反発する",
         after:[
           { spk:"Uさん",  side:"R", text:"なんでそういうことを言うんですか……！" },
           { spk:"教授",   side:"L", text:"これは学術的な議論ですよ？批判的思考は研究に不可欠です。" },
