@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>コミュニケーション巻き戻し 絵コンテ</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:20px 14px;background:#cfcfcf;color:#111;font-family:'Hiragino Kaku Gothic ProN','Yu Gothic','Meiryo',sans-serif}.toolbar{position:sticky;top:0;z-index:10;display:flex;gap:10px;justify-content:center;align-items:center;flex-wrap:wrap;margin:0 auto 16px;padding:10px;border-radius:10px;background:rgba(255,255,255,.92);box-shadow:0 2px 12px rgba(0,0,0,.2)}.toolbar button,.toolbar a{border:0;border-radius:999px;background:#333;color:#fff;padding:9px 18px;text-decoration:none;font-size:13px;font-family:inherit;cursor:pointer}.toolbar button:hover,.toolbar a:hover{background:#111}.page{width:210mm;min-height:297mm;margin:0 auto 18px;padding:10mm 12mm 9mm;background:#fff;box-shadow:0 2px 16px rgba(0,0,0,.25);page-break-after:always}.doc-title{font-size:10pt;text-decoration:underline;margin-bottom:5px}.meta{font-size:8.6pt;line-height:1.7;margin-bottom:6mm}.meta .blank{display:inline-block;border-bottom:1px solid #333;min-width:35mm;height:12px}.meta .wide{min-width:92mm}.cb{display:inline-block;width:10px;height:10px;border:1px solid #333;margin:0 2px -1px 8px}.cb.checked::after{content:'✓';display:block;font-size:8pt;line-height:9px;text-align:center}.stage-title{font-size:13pt;font-weight:bold;text-align:center;margin:0 0 4mm;padding:4px;border:1.4px solid #444;background:#eee}.storyboard{width:100%;border-collapse:collapse;table-layout:fixed}.storyboard th{border:1.3px solid #555;background:#d7d7d7;padding:5px 0;font-size:9.5pt}.storyboard td{height:45mm;border:1.3px solid #555;vertical-align:top;padding:5px 7px;font-size:8.2pt;line-height:1.55}.visual{width:56%;border-right:1.3px dashed #777!important}.desc{width:44%}.place{font-size:7.6pt;color:#555;margin-bottom:3px}.chars{font-size:21pt;line-height:1.15;margin:2px 0}.name-row{font-size:7.5pt;color:#555;margin-bottom:2px}.balloon{display:inline-block;max-width:100%;border:1px solid #888;border-radius:6px;padding:2px 6px;margin:2px 0;background:#fafafa}.bad{border-color:#c66;background:#fff3f3}.good{border-color:#5b8;background:#f1fff6}.system{border-color:#888;background:#f3f3f3;font-weight:bold}.arrow{display:block;text-align:center;font-size:12pt;color:#555;margin:1px 0}.stamp{display:inline-block;margin-top:2px;padding:2px 7px;border-radius:4px;font-weight:bold}.stamp.bad{color:#a00;background:#fee;border:1px solid #e99}.stamp.good{color:#063;background:#efffed;border:1px solid #9c9}.desc-head{font-weight:bold;color:#1a1a68;border-bottom:1px solid #ddd;margin-bottom:4px;padding-bottom:2px}.desc ul{margin:3px 0 0 1.1em;padding:0}.desc li{margin:1px 0}.note{margin-top:4mm}.note-title{font-size:9pt;font-weight:bold;margin-bottom:3px}.note-body{border:1px solid #999;border-radius:3px;background:#fafafa;padding:5px 8px;min-height:17mm;font-size:8.3pt;line-height:1.65}.screen-only{color:#555;font-size:12px}@media print{@page{size:A4;margin:0}body{background:#fff;padding:0}.toolbar{display:none}.page{width:210mm;min-height:297mm;margin:0;box-shadow:none}.page:last-child{page-break-after:auto}}
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <button onclick="window.print()">🖨️ 全ステージを印刷 / PDF保存</button>
+  <a href="./index.html">ゲームへ戻る</a>
+  <span class="screen-only">各ステージA4 1枚で出力されます</span>
+</div>
+
+<main id="pages"></main>
+
+<script>
+const storyboards = [
+  {
+    stage:'ステージ1：文脈無視の乱入',
+    place:'📍 教室　発表テーマ相談中',
+    chars:'🧑‍🤝‍🧑　　🚶',
+    names:'Aさん・Bさん　　Cさん',
+    summary:'AさんとBさんが授業発表について相談しているところへ、Cさんが文脈を確認せずに乱入する。',
+    point:'会話に途中参加するとき、現在の話題と参加してよいかを確認しないと、相手は何の話か分からなくなる。',
+    rows:[
+      {
+        head:'アカン例',
+        visual:[['Aさん','次の発表、コミュニケーション不全の例を寸劇にするってどう？',''],['Bさん','相手の話題を無視して、急に別の話をする例が分かりやすそう。',''],['Cさん','あんたって妹と最近どうなん','bad'],['Aさん・Bさん','？','bad'],['Cさん','🛬🕋','bad']],
+        desc:'Cさんは、AさんとBさんが何を話しているかを確認せず、急に私的な話題を出している。さらに絵文字だけで返すため、意図が共有されず会話が止まる。'
+      },
+      {
+        head:'失敗ポップアップ',
+        visual:[['画面','失敗した！会話に入る直前からやり直せ。','system']],
+        desc:'失敗後、説明役は出さずにポップアップでやり直しを促す。プレイヤーは同じ場面から別の入り方を選ぶ。'
+      },
+      {
+        head:'修復後',
+        visual:[['Cさん','今、授業の発表について話してた？ 途中から聞こえたんだけど、入ってもいい？','good'],['Aさん','うん、コミュニケーション不全の例を考えてた。',''],['Bさん','入って大丈夫。何か案ある？','']],
+        desc:'Cさんは先に話題を確認し、会話に入る許可を取る。これにより、乱入ではなく自然な参加になる。'
+      },
+      {
+        head:'結果',
+        visual:[['画面','いい感じ！ 会話が止まらず、次の場面へ進めるようになりました。','good']],
+        desc:'修復後は、Aさん・Bさんの文脈を壊さずにCさんが会話へ入れる。'
+      }
+    ],
+    note:'途中参加では、「今何の話をしているか」「自分が入ってよいか」を確認することが重要である。'
+  },
+  {
+    stage:'ステージ2：曖昧な作業依頼',
+    place:'📍 図書館　発表資料づくり',
+    chars:'🧑　　👩',
+    names:'Aさん　　Bさん',
+    summary:'AさんがBさんに資料作成を頼むが、「いい感じ」という曖昧な依頼により認識ズレが起きる。',
+    point:'依頼では、担当範囲・期限・完成条件を共有しないと、相手の解釈に任せることになり、結果がズレる。',
+    rows:[
+      {
+        head:'アカン例',
+        visual:[['Aさん','俺、用事あるから先に帰るわ。資料、いい感じにしといて。','bad'],['Bさん','いい感じって、どこまで？',''],['Aさん','そこは任せる。発表で困らない感じ。','bad'],['Bさん','えっと……じゃあデザインだけ整えておくね。','']],
+        desc:'Aさんは依頼内容を具体化せず、Bさんに判断を丸投げしている。Bさんは何を優先すべきか分からない。'
+      },
+      {
+        head:'失敗ポップアップ',
+        visual:[['翌日','なんで内容が増えてないの？ 発表で困るじゃん。','bad'],['画面','失敗した！作業を頼む直前からやり直せ。','system']],
+        desc:'翌日に認識違いが発覚する。依頼時点で条件が共有されていないことが失敗の原因。'
+      },
+      {
+        head:'修復後',
+        visual:[['Aさん','Bさんはスライド3〜5枚目の文章を短くして、今日20時までに共有してくれる？ 画像探しは俺が帰ってからやる。','good'],['Bさん','それなら分かる。文章の整理だけ今日20時までね。',''],['Aさん','ありがとう。終わったらチャットに送って。確認する。','']],
+        desc:'Aさんは、担当範囲・期限・自分がやる部分を明確にしている。Bさんは何をすればよいか判断できる。'
+      },
+      {
+        head:'結果',
+        visual:[['画面','いい感じ！ 会話が止まらず、次の場面へ進めるようになりました。','good']],
+        desc:'曖昧な依頼が、具体的な作業依頼に変わった。'
+      }
+    ],
+    note:'「いい感じ」「任せる」「適当に」は便利だが、作業依頼ではズレを生みやすい。'
+  },
+  {
+    stage:'ステージ3：発表中の助け方ミス',
+    place:'📍 発表本番　前に出て発表中',
+    chars:'👩‍🏫　　🧑',
+    names:'Bさん　　Aさん',
+    summary:'発表中にBさんが詰まったとき、Aさんが強く割り込んで発表を奪ってしまう。',
+    point:'相手を助けるつもりでも、否定して主導権を奪うと、相手の立場を壊してしまう。',
+    rows:[
+      {
+        head:'アカン例',
+        visual:[['Bさん','えっと、この場面では……相手の……えー……',''],['Aさん','そこ違う。もういい、俺が説明する。','bad'],['Bさん','え……','bad'],['観客','助けたというより、発表を奪った感じになってる……','bad']],
+        desc:'AさんはBさんを助けようとしているが、「そこ違う」「もういい」と否定しているため、Bさんの発表者としての立場を奪っている。'
+      },
+      {
+        head:'失敗ポップアップ',
+        visual:[['画面','失敗した！Bさんが詰まった場面からやり直せ。','system']],
+        desc:'Bさんを助ける場面に戻る。発表を奪わずに補足する選択が必要。'
+      },
+      {
+        head:'修復後',
+        visual:[['Aさん','補足すると、この場面では「相手の話題を確認せずに入る」と会話が止まりやすい、という例です。','good'],['Bさん','そうです。なので、改善後は最初に「今の話に入ってもいい？」と確認します。',''],['Aさん','Bさんの説明に付け加えると、相手の立場を残したまま話すことも大事です。','']],
+        desc:'Aさんは「補足」として入ることで、Bさんの説明を壊さずに助けている。'
+      },
+      {
+        head:'結果',
+        visual:[['画面','いい感じ！ 会話が止まらず、次の場面へ進めるようになりました。','good']],
+        desc:'助ける行為が、支配ではなく支援として伝わる。'
+      }
+    ],
+    note:'相手が詰まったときは、否定ではなく「補足」「言い換えると」で支援する。'
+  },
+  {
+    stage:'ステージ4：前提共有なしの「結局」',
+    place:'📍 放課後　教室の出口付近',
+    chars:'🧑　　🎒',
+    names:'Aさん　　Dさん',
+    summary:'Dさんが「結局さ、夜店いくん？」と聞くが、「結局」の前提が共有されておらず、Aさんには何の話か分からない。',
+    point:'「結局」は、過去の会話や迷っていた内容を相手も覚えている前提で使われるため、前提が共有されていないと通じない。',
+    rows:[
+      {
+        head:'アカン例',
+        visual:[['Aさん','今日の発表、資料の順番だけ帰る前に確認しよう。',''],['Dさん','結局さ、夜店いくん？','bad'],['Aさん','え、夜店？','bad'],['Dさん','だから、結局どうするんって話。','bad'],['Aさん','ごめん、何の話か分からない。今は発表資料の話をしてた。','']],
+        desc:'Dさんは「結局」という言葉で過去の話題を前提にしているが、Aさんにはその前提が見えていない。'
+      },
+      {
+        head:'失敗ポップアップ',
+        visual:[['画面','失敗した！「結局」の前提を共有する直前からやり直せ。','system']],
+        desc:'「結局」と聞く前に、何について確認したいのかを言葉にする必要がある。'
+      },
+      {
+        head:'修復後',
+        visual:[['Dさん','ごめん、発表の話の途中で一つだけ確認していい？ この前話してた、駅前の祭りの夜店に行くかどうかの件なんだけど、今日決める？','good'],['Aさん','ああ、その話ね。発表資料を確認したあとで決めよう。',''],['Dさん','了解。じゃあ資料の確認が終わったらまた聞く。','']],
+        desc:'Dさんは、急に別話題へ移る前に断りを入れ、さらに「夜店」が何の件なのかを具体的に説明している。'
+      },
+      {
+        head:'結果',
+        visual:[['画面','いい感じ！ 会話が止まらず、次の場面へ進めるようになりました。','good']],
+        desc:'「結局」の裏にあるコンテキストが共有されたため、Aさんが反応できる。'
+      }
+    ],
+    note:'「結局」のような省略語は、相手も同じ文脈を持っているときだけ通じる。前提が怪しいときは、「何の件か」を先に言う。'
+  }
+];
+
+function esc(s){return String(s).replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]))}
+function balloon([name,text,type]){return `<div class="balloon ${type||''}">${esc(name)}：「${esc(text)}」</div><br>`}
+function page(stage,i){return `<section class="page" id="stage-${i+1}"><div class="doc-title">コミュニケーションスキル中間発表　絵コンテ</div><div class="meta">チーム名（<span class="blank"></span>）　メンバー（<span class="blank wide"></span>）<br>当日の発表予定形式 <span class="cb"></span>動画 <span class="cb checked"></span>寸劇 <span class="cb"></span>プレゼン <span class="cb"></span>その他（<span class="blank"></span>）</div><div class="stage-title">${esc(stage.stage)}</div><table class="storyboard"><thead><tr><th class="visual">絵・図等</th><th class="desc">説明</th></tr></thead><tbody>${stage.rows.map((r,idx)=>`<tr><td class="visual"><div class="place">${idx===0?esc(stage.place):''}</div><div class="chars">${idx===0?stage.chars:''}</div><div class="name-row">${idx===0?esc(stage.names):''}</div>${r.visual.map(balloon).join('')}<span class="arrow">${idx<3?'↓':''}</span>${idx===0?'<span class="stamp bad">失敗</span>':idx===2?'<span class="stamp good">修復</span>':''}</td><td class="desc"><div class="desc-head">【${esc(r.head)}】</div>${esc(r.desc)}</td></tr>`).join('')}</tbody></table><div class="note"><div class="note-title">補足説明</div><div class="note-body"><strong>場面：</strong>${esc(stage.summary)}<br><strong>コミュニケーション不全ポイント：</strong>${esc(stage.point)}<br><strong>まとめ：</strong>${esc(stage.note)}</div></div></section>`}
+document.getElementById('pages').innerHTML=storyboards.map(page).join('');
+</script>
+</body>
+</html>
