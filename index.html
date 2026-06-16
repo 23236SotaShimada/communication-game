@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>コミュニケーション不全ラボ 〜Cさんの乱入〜</title>
+<title>コミュニケーション不全ラボ 〜時間を巻き戻せ〜</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -57,7 +57,7 @@ body {
 .title-sub { font-size: 20px; color: #fa9; margin-bottom: 36px; }
 
 .title-card {
-    max-width: 620px; margin: 0 auto 36px;
+    max-width: 650px; margin: 0 auto 36px;
     background: rgba(255,255,255,0.05);
     border: 1px solid rgba(100,150,255,0.2);
     border-radius: 12px; padding: 22px 28px;
@@ -156,11 +156,16 @@ body {
     color: #fa9; border-color: #fa9;
     background: rgba(255,160,80,0.1); font-style: italic;
 }
+.spk-name.system {
+    color: #f9f; border-color: #f9f;
+    background: rgba(255,100,255,0.1);
+}
 .dlg-text {
     font-size: 17px; line-height: 1.75; color: #e8e8e8; flex: 1;
     white-space: pre-wrap;
 }
 .dlg-text.internal { color: #fa9; font-style: italic; }
+.dlg-text.system { color: #fdf; letter-spacing: 0.03em; }
 .click-hint {
     position: absolute; bottom: 12px; right: 18px;
     font-size: 11px; color: rgba(255,255,255,0.35);
@@ -204,11 +209,11 @@ body {
     padding: 32px 36px; max-width: 620px; width: 92%;
     text-align: center; z-index: 20;
 }
-.result-panel.bad  { border-color: #f66; }
+.result-panel.bad  { border-color: #f9f; }
 .result-panel.good { border-color: #6f6; }
 .res-icon  { font-size: 56px; margin-bottom: 12px; }
 .res-title { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
-.bad  .res-title { color: #f66; }
+.bad  .res-title { color: #f9f; }
 .good .res-title { color: #6f6; }
 .res-text { font-size: 14px; line-height: 1.8; color: #ccc; margin-bottom: 16px; white-space: pre-wrap; }
 .res-tip {
@@ -280,13 +285,13 @@ body {
 <div class="screen active" id="title-screen">
     <div class="stars" id="stars"></div>
     <div class="title-wrap">
-        <div class="title-badge">Communication Breakdown Game</div>
-        <div class="title-main">コミュニケーション不全ラボ</div>
-        <div class="title-sub">〜 Cさんの乱入を修復せよ 〜</div>
+        <div class="title-badge">Communication Rewind Game</div>
+        <div class="title-main">コミュニケーション巻き戻し</div>
+        <div class="title-sub">〜 Cさんの乱入をやり直せ 〜</div>
         <div class="title-card">
             <strong>AさんとBさん</strong>は、コミュニケーションの授業で使う寸劇について話しています。<br><br>
-            そこへ突然Cさんが現れ、<span class="bad-tag">文脈を無視した質問</span>と<span class="bad-tag">謎の絵文字</span>で会話を止めてしまいます。<br><br>
-            まずはアカン例を見て、どこが問題なのかを選び、最後に<span class="good-tag">会話が続く言い方</span>へ直してください。
+            そこへCさんが現れ、<span class="bad-tag">文脈を無視した質問</span>と<span class="bad-tag">謎の絵文字</span>で会話を止めてしまいます。<br><br>
+            まずはアカン例を見ます。その後、時間が巻き戻るので、同じ場面で<span class="good-tag">会話が続く選択</span>をしてください。
         </div>
         <button class="start-btn" onclick="startGame()">▶ アカン例を見る</button>
     </div>
@@ -299,7 +304,7 @@ body {
     <div class="hud">
         <div class="scene-label" id="scene-label">シーン1</div>
         <div class="progress-dots" id="progress-dots"></div>
-        <div class="score-hud">理解度 <span id="score-val">0</span> / 3</div>
+        <div class="score-hud">修復数 <span id="score-val">0</span> / 3</div>
     </div>
 
     <div class="location-tag" id="location-tag"></div>
@@ -328,12 +333,12 @@ body {
 <!-- ===== エンド画面 ===== -->
 <div class="screen" id="end-screen">
     <div class="end-wrap">
-        <div class="end-title">🎊 修復完了！</div>
+        <div class="end-title">🎊 時間修復完了！</div>
         <div class="end-score" id="end-score"></div>
         <div class="tips-box" id="tips-box"></div>
         <div class="end-msg">
-            唐突な乱入も、文脈確認・許可取り・意図の言語化を入れるだけで、<br>
-            授業で使える「コミュニケーション不全の例」に変えられます。
+            アカン例を見たあと、時間を巻き戻して別の選択をすることで、<br>
+            会話の流れを止めずに寸劇として成立させられました。
         </div>
         <button class="replay-btn" onclick="restartGame()">もう一度プレイする</button>
     </div>
@@ -345,7 +350,7 @@ body {
 /* ========== ゲームデータ ========== */
 const SCENES = [
   {
-    title: "シーン1：まずはアカン例",
+    title: "シーン1：乱入の瞬間",
     location: "📍 教室　コミュニケーションの授業後",
     bg: "linear-gradient(180deg,#071830 0%,#050d20 65%,#030810 100%)",
     chars: { L: { emoji:"🧑‍🤝‍🧑", name:"Aさん・Bさん" }, R: { emoji:"🚶", name:"Cさん" } },
@@ -358,52 +363,20 @@ const SCENES = [
       { spk:"Aさん", side:"L", text:"？" },
       { spk:"Bさん", side:"L", text:"？" },
       { spk:"Cさん", side:"R", text:"🛬🕋" },
-      { spk:"ナレーション", side:null, text:"会話は完全に停止した。AさんとBさんは、何を返せばいいのか分からない。" }
+      { spk:"ナレーション", side:null, text:"会話は停止した。" },
+      { spk:"SYSTEM", side:null, text:"時間を巻き戻します。\nCさんが乱入する直前からやり直してください。", system:true }
     ],
-    choiceQ: "⚡ この場面で一番アカンところは？",
+    choiceQ: "⚡ 巻き戻し後：Cさんは最初にどう入る？",
     choices: [
       {
-        type:"bad", label:"絵文字を使ったことだけが問題", sub:"文字ではなく言葉で話せば全部OK",
-        after:[
-          { spk:"あなた", side:"L", text:"絵文字じゃなくて普通の日本語にすればよかったんだと思う。" },
-          { spk:"先生", side:"L", text:"それも一部ですが、本質はそこだけではありません。" },
-          { spk:"先生", side:"L", text:"Cさんは、会話の流れも、相手との距離感も、発言の意図も共有できていません。" }
-        ],
-        explain:"絵文字だけで返したことは問題ですが、それ以前に、Cさんは会話の文脈を確認せず、突然私的な質問をしています。問題を浅く捉えると改善につながりません。",
-        tip:null
-      },
-      {
-        type:"good", label:"文脈を確認せず、急に私的な話をしたこと", sub:"話題・距離感・意図の共有がない",
-        after:[
-          { spk:"あなた", side:"L", text:"Cさんは、今の話題を確認せずに入ってきて、しかも急に私的な質問をしたのが問題だと思う。" },
-          { spk:"先生", side:"L", text:"その通りです。さらに、相手が困惑したあとも意図を説明していません。" },
-          { spk:"先生", side:"L", text:"これは『文脈の無視』『距離感の誤り』『言語化不足』が重なった例です。" }
-        ],
-        explain:"",
-        tip:"💡 ポイント：コミュニケーション不全は、発言内容だけでなく、タイミング・関係性・相手の理解状況によって起きます。"
-      }
-    ]
-  },
-  {
-    title: "シーン2：会話に入る前の修復",
-    location: "📍 同じ教室　もう一度やり直し",
-    bg: "linear-gradient(180deg,#081a08 0%,#050e05 65%,#030803 100%)",
-    chars: { L: { emoji:"🧑‍🤝‍🧑", name:"Aさん・Bさん" }, R: { emoji:"🚶", name:"Cさん" } },
-    dialogues: [
-      { spk:"Aさん", side:"L", text:"次の発表、コミュニケーション不全の例を寸劇にするってどう？" },
-      { spk:"Bさん", side:"L", text:"いいね。相手の話題を無視して、急に別の話をする例が分かりやすそう。" },
-      { spk:"Cさん（心の声）", side:"R", text:"今なら話に入れそう。でも、いきなり本題を投げるとまた止まりそうだ。", internal:true }
-    ],
-    choiceQ: "⚡ Cさんは最初にどう入る？",
-    choices: [
-      {
-        type:"bad", label:"「あんたって妹と最近どうなん」", sub:"前と同じように突然聞く",
+        type:"bad", label:"「あんたって妹と最近どうなん」", sub:"同じように突然聞く",
         after:[
           { spk:"Cさん", side:"R", text:"あんたって妹と最近どうなん" },
-          { spk:"Aさん", side:"L", text:"またそれ？ 今その話してないけど……" },
-          { spk:"Bさん", side:"L", text:"何のために聞いてるのか分からない。" }
+          { spk:"Aさん", side:"L", text:"？" },
+          { spk:"Bさん", side:"L", text:"？" },
+          { spk:"SYSTEM", side:null, text:"会話停止を確認。時間を再巻き戻しします。", system:true }
         ],
-        explain:"話題を変える前に、今の会話へ入ってよいかを確認する必要があります。突然の私的質問は、相手に防御反応や困惑を生みます。",
+        rewind:"同じ未来に到達しました。\n乱入する前の一言を変えてください。",
         tip:null
       },
       {
@@ -414,30 +387,34 @@ const SCENES = [
           { spk:"Bさん", side:"L", text:"入って大丈夫。何か案ある？" }
         ],
         explain:"",
-        tip:"💡 ポイント：会話に途中参加するときは、『何の話か』『入ってよいか』を先に確認すると、相手が受け取りやすくなります。"
+        tip:"💡 修復：途中参加するときは、最初に『何の話か』『入ってよいか』を確認すると、会話が止まりにくくなります。"
       }
     ]
   },
   {
-    title: "シーン3：変な発言を教材に変える",
-    location: "📍 教室　改善案づくり",
-    bg: "linear-gradient(180deg,#180a20 0%,#0f0515 65%,#080310 100%)",
+    title: "シーン2：変な話題の出し方",
+    location: "📍 教室　Cさんも相談に参加",
+    bg: "linear-gradient(180deg,#081a08 0%,#050e05 65%,#030803 100%)",
     chars: { L: { emoji:"🧑‍🤝‍🧑", name:"Aさん・Bさん" }, R: { emoji:"🚶", name:"Cさん" } },
     dialogues: [
-      { spk:"Aさん", side:"L", text:"じゃあ、文脈を無視して話題を変える例を考えたいんだけど……" },
-      { spk:"Bさん", side:"L", text:"相手が『？』ってなるくらい唐突な例があると伝わりやすいよね。" },
-      { spk:"Cさん（心の声）", side:"R", text:"さっきの妹の話、使い方を間違えなければ例として使えるかもしれない。", internal:true }
+      { spk:"Aさん", side:"L", text:"じゃあ、コミュニケーション不全の例を考えよう。" },
+      { spk:"Bさん", side:"L", text:"急に別の話をする場面があると分かりやすいかも。" },
+      { spk:"Cさん", side:"R", text:"妹と最近どうなん" },
+      { spk:"Aさん", side:"L", text:"それ、今聞いてるの？ 例として言ってるの？" },
+      { spk:"Cさん", side:"R", text:"🛬🕋" },
+      { spk:"Bさん", side:"L", text:"また分からなくなった。" },
+      { spk:"SYSTEM", side:null, text:"時間を巻き戻します。\nCさんが例を出す直前からやり直してください。", system:true }
     ],
-    choiceQ: "⚡ Cさんはどう提案する？",
+    choiceQ: "⚡ 巻き戻し後：Cさんはどう話題を出す？",
     choices: [
       {
-        type:"bad", label:"「で、妹と最近どうなん。🛬🕋」", sub:"結局また同じことをする",
+        type:"bad", label:"「妹と最近どうなん」", sub:"目的を言わずに例だけ投げる",
         after:[
-          { spk:"Cさん", side:"R", text:"で、妹と最近どうなん。🛬🕋" },
-          { spk:"Aさん", side:"L", text:"いや、だから何の話？" },
-          { spk:"Bさん", side:"L", text:"例として使いたいなら、先にそう説明して。" }
+          { spk:"Cさん", side:"R", text:"妹と最近どうなん" },
+          { spk:"Aさん", side:"L", text:"え、今の話と関係ある？" },
+          { spk:"SYSTEM", side:null, text:"会話停止を確認。時間を再巻き戻しします。", system:true }
         ],
-        explain:"同じ内容でも、目的を説明せずに投げると、ただの唐突な私的質問になります。絵文字も補足説明がなければ意味が共有されません。",
+        rewind:"目的が共有されない未来に戻りました。\n例として出すなら、先に『例として』と言う必要があります。",
         tip:null
       },
       {
@@ -448,7 +425,46 @@ const SCENES = [
           { spk:"Bさん", side:"L", text:"改善後は『今の話に入っていい？』から始める形にしよう。" }
         ],
         explain:"",
-        tip:"💡 ポイント：突飛な内容でも、『これは例として出している』と目的を言語化すれば、相手は意図を理解できます。"
+        tip:"💡 修復：突飛な内容でも、『例として出している』と先に言えば、相手は目的を理解できます。"
+      }
+    ]
+  },
+  {
+    title: "シーン3：絵文字だけの発言",
+    location: "📍 教室　寸劇のオチを調整中",
+    bg: "linear-gradient(180deg,#180a20 0%,#0f0515 65%,#080310 100%)",
+    chars: { L: { emoji:"🧑‍🤝‍🧑", name:"Aさん・Bさん" }, R: { emoji:"🚶", name:"Cさん" } },
+    dialogues: [
+      { spk:"Aさん", side:"L", text:"最後に、Cさんが謎の絵文字を送って会話が止まる流れにする？" },
+      { spk:"Bさん", side:"L", text:"でも、絵文字だけだと発表を見てる人にも意味が分からないかも。" },
+      { spk:"Cさん", side:"R", text:"🛬🕋" },
+      { spk:"Aさん", side:"L", text:"？" },
+      { spk:"Bさん", side:"L", text:"？" },
+      { spk:"ナレーション", side:null, text:"観客も、Aさんも、Bさんも、同じ顔になった。" },
+      { spk:"SYSTEM", side:null, text:"時間を巻き戻します。\nCさんが絵文字を出す直前からやり直してください。", system:true }
+    ],
+    choiceQ: "⚡ 巻き戻し後：絵文字を使うならどうする？",
+    choices: [
+      {
+        type:"bad", label:"「🛬🕋」", sub:"何も説明せずに絵文字だけ出す",
+        after:[
+          { spk:"Cさん", side:"R", text:"🛬🕋" },
+          { spk:"Aさん", side:"L", text:"？" },
+          { spk:"Bさん", side:"L", text:"？" },
+          { spk:"SYSTEM", side:null, text:"意味共有に失敗。時間を再巻き戻しします。", system:true }
+        ],
+        rewind:"同じ沈黙に戻りました。\n絵文字を使うなら、意味を言葉で補ってください。",
+        tip:null
+      },
+      {
+        type:"good", label:"「絵文字だけで返すと、こうやって伝わらない」", sub:"実演後に意味を言葉で補う",
+        after:[
+          { spk:"Cさん", side:"R", text:"ここで『🛬🕋』って絵文字だけ返したら、相手は意味が分からなくて止まる、という例にできると思う。" },
+          { spk:"Aさん", side:"L", text:"なるほど。絵文字そのものより、説明なしで投げるのが問題って見せられるね。" },
+          { spk:"Bさん", side:"L", text:"これならアカン例と改善例がつながる。" }
+        ],
+        explain:"",
+        tip:"💡 修復：絵文字や略語を使う場合でも、相手が意味を共有できるように言葉で補えば、会話の材料になります。"
       }
     ]
   }
@@ -484,6 +500,7 @@ function showScreen(id) {
 function fade(to, cb) {
     const el = document.getElementById('fade');
     el.style.opacity = to;
+    el.pointerEvents = to > 0 ? 'all' : 'none';
     el.style.pointerEvents = to > 0 ? 'all' : 'none';
     if (cb) setTimeout(cb, 420);
 }
@@ -566,8 +583,8 @@ function showDlg(d) {
     const nameEl = document.getElementById('spk-name');
     const textEl = document.getElementById('dlg-text');
     nameEl.textContent = d.spk;
-    nameEl.className = 'spk-name' + (d.internal ? ' internal' : '');
-    textEl.className = 'dlg-text' + (d.internal ? ' internal' : '');
+    nameEl.className = 'spk-name' + (d.internal ? ' internal' : '') + (d.system ? ' system' : '');
+    textEl.className = 'dlg-text' + (d.internal ? ' internal' : '') + (d.system ? ' system' : '');
     renderChars(d.side || null);
     typewrite(textEl, d.text, null);
 }
@@ -631,22 +648,22 @@ function showResult() {
 
     if (chosen.type === 'bad') {
         panel.className = 'result-panel bad';
-        icon.textContent  = '😵';
-        title.textContent = 'まだアカン！';
-        text.textContent  = chosen.explain;
+        icon.textContent  = '⏪';
+        title.textContent = '時間が巻き戻った';
+        text.textContent  = chosen.rewind || '同じ未来に到達しました。別の選択をしてください。';
         tipEl.style.display = 'none';
-        btn.textContent = 'もう一度選ぶ';
+        btn.textContent = '巻き戻して選び直す';
         btn.onclick = retryChoice;
     } else {
         score++; updateScore();
         panel.className = 'result-panel good';
         icon.textContent  = '✅';
-        title.textContent = 'いい感じ！';
-        text.textContent  = '問題点を正しく捉え、会話が続く方向へ修復できました。';
+        title.textContent = '未来が変わった';
+        text.textContent  = '会話が止まらず、次の場面へ進めるようになりました。';
         tipEl.style.display = 'block';
         tipEl.textContent  = chosen.tip;
         if (sceneIdx < SCENES.length - 1) {
-            btn.textContent = '次のシーンへ →';
+            btn.textContent = '次の巻き戻しへ →';
             btn.onclick = nextScene;
         } else {
             btn.textContent = 'ゲームクリア！ 🎊';
@@ -674,18 +691,18 @@ function showEnd() {
     setTimeout(() => {
         const sc = document.getElementById('end-score');
         if (score === 3) {
-            sc.innerHTML = `⭐ ${score} / 3 ⭐<br><span style="font-size:18px;color:#ff9">パーフェクト！</span>`;
+            sc.innerHTML = `⭐ ${score} / 3 ⭐<br><span style="font-size:18px;color:#ff9">全タイムライン修復！</span>`;
             sc.style.color = '#ffd';
         } else if (score >= 2) {
-            sc.innerHTML = `✅ ${score} / 3<br><span style="font-size:18px;color:#9f9">よくできました！</span>`;
+            sc.innerHTML = `✅ ${score} / 3<br><span style="font-size:18px;color:#9f9">かなり修復できました！</span>`;
             sc.style.color = '#9f9';
         } else {
-            sc.innerHTML = `📚 ${score} / 3<br><span style="font-size:18px;color:#fa9">もう一度挑戦しよう！</span>`;
+            sc.innerHTML = `📚 ${score} / 3<br><span style="font-size:18px;color:#fa9">もう一度巻き戻そう！</span>`;
             sc.style.color = '#fa9';
         }
 
         const box = document.getElementById('tips-box');
-        box.innerHTML = '<div class="tips-heading">📋 今日のポイントまとめ</div>';
+        box.innerHTML = '<div class="tips-heading">📋 修復した未来</div>';
         SCENES.forEach((s, i) => {
             const good = s.choices.find(c => c.type === 'good');
             const row = document.createElement('div');
@@ -693,7 +710,7 @@ function showEnd() {
             row.innerHTML = `
                 <div class="tip-num">${i+1}</div>
                 <div class="tip-body"><strong>${s.title}</strong><br>
-                ${good.tip.replace('💡 ポイント：','')}</div>`;
+                ${good.tip.replace('💡 修復：','')}</div>`;
             box.appendChild(row);
         });
     }, 500);
