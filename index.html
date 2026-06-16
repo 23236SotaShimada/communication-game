@@ -3,331 +3,704 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>絵コンテ〜コミュニケーション不全例〜</title>
+<title>コミュニケーション不全ラボ 〜Cさんの乱入〜</title>
 <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 body {
-    font-family: 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
-    background: #ccc;
-    margin: 0;
-    padding: 20px 16px;
+    font-family: 'Hiragino Kaku Gothic ProN', 'Yu Gothic', sans-serif;
+    background: #0a0a0f;
+    color: #fff;
+    height: 100vh;
+    overflow: hidden;
+    user-select: none;
 }
 
-.print-btn {
-    display: block;
-    margin: 0 auto 16px;
-    padding: 10px 28px;
-    background: #444;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
+#game { width: 100%; height: 100vh; position: relative; }
+
+.screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.screen.active { display: flex; }
+
+/* ===== タイトル画面 ===== */
+#title-screen { background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2a 50%, #0a1a2a 100%); }
+
+.stars { position: absolute; width: 100%; height: 100%; overflow: hidden; pointer-events: none; }
+.star {
+    position: absolute; background: white; border-radius: 50%;
+    animation: twinkle var(--dur) infinite;
+}
+@keyframes twinkle {
+    0%,100% { opacity: 0.1; }
+    50% { opacity: 0.9; }
+}
+
+.title-wrap { text-align: center; z-index: 1; padding: 20px; }
+.title-badge {
+    display: inline-block;
+    font-size: 11px; letter-spacing: 4px; color: #6af;
+    border: 1px solid #6af; padding: 4px 14px; border-radius: 20px;
+    margin-bottom: 16px; text-transform: uppercase;
+}
+.title-main {
+    font-size: 44px; font-weight: 700; margin-bottom: 8px;
+    background: linear-gradient(135deg, #fff 30%, #adf);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.title-sub { font-size: 20px; color: #fa9; margin-bottom: 36px; }
+
+.title-card {
+    max-width: 620px; margin: 0 auto 36px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(100,150,255,0.2);
+    border-radius: 12px; padding: 22px 28px;
+    font-size: 14px; line-height: 1.9; color: #bbb;
+    text-align: left;
+}
+.title-card strong { color: #fff; }
+.title-card .bad-tag {
+    display: inline-block;
+    background: rgba(255,90,90,0.15);
+    border: 1px solid rgba(255,100,100,0.4);
+    color: #f99; border-radius: 4px;
+    padding: 1px 7px; font-size: 12px;
+}
+.title-card .good-tag {
+    display: inline-block;
+    background: rgba(100,255,100,0.1);
+    border: 1px solid rgba(100,255,100,0.3);
+    color: #9f9; border-radius: 4px;
+    padding: 1px 7px; font-size: 12px;
+}
+
+.start-btn {
+    padding: 16px 56px; font-size: 18px; font-weight: 700;
+    background: linear-gradient(135deg, #1a3060, #102040);
+    border: 2px solid #6af; border-radius: 40px;
+    color: #fff; cursor: pointer; transition: all 0.2s;
     font-family: inherit;
+}
+.start-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(100,150,255,0.3); }
+
+/* ===== シーン画面 ===== */
+.scene-bg {
+    position: absolute; width: 100%; height: 100%;
+    transition: background 0.8s ease;
+}
+
+.hud {
+    position: absolute; top: 0; left: 0; right: 0;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 20px;
+    background: rgba(0,0,10,0.6);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    z-index: 10;
+}
+.scene-label { font-size: 13px; color: rgba(255,255,255,0.5); }
+.progress-dots { display: flex; gap: 8px; align-items: center; }
+.dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: rgba(255,255,255,0.2); transition: all 0.4s;
+}
+.dot.active { background: #6af; box-shadow: 0 0 8px #6af; }
+.dot.done { background: #6f6; }
+.score-hud { font-size: 13px; color: rgba(255,255,255,0.6); }
+.score-hud span { color: #6f6; font-weight: 700; }
+
+.location-tag {
+    position: absolute; top: 58px; left: 50%; transform: translateX(-50%);
+    background: rgba(0,0,30,0.85); border: 1px solid rgba(100,150,255,0.3);
+    border-radius: 20px; padding: 6px 18px;
+    font-size: 13px; color: #adf; white-space: nowrap; z-index: 10;
+}
+
+/* キャラクターエリア */
+.char-area {
+    position: absolute; bottom: 195px; width: 100%;
+    display: flex; justify-content: space-around; align-items: flex-end;
+    padding: 0 8%;
+}
+.char-box { text-align: center; transition: all 0.3s; }
+.char-emoji { font-size: 90px; display: block; transition: all 0.3s; }
+.char-name { font-size: 12px; color: #888; margin-top: 4px; }
+.char-box.speaking .char-emoji {
+    transform: scale(1.12);
+    filter: drop-shadow(0 0 20px rgba(255,255,255,0.4));
+}
+.char-box.dim .char-emoji { filter: brightness(0.3) saturate(0.3); }
+
+/* 台詞ボックス */
+.dialogue-box {
+    position: absolute; bottom: 0; left: 0; right: 0; height: 188px;
+    background: rgba(0,0,18,0.93);
+    border-top: 2px solid rgba(100,150,255,0.35);
+    padding: 16px 28px 14px;
+    display: flex; flex-direction: column;
     cursor: pointer;
 }
-.print-btn:hover { background: #222; }
-
-.page {
-    background: white;
-    width: 210mm;
-    min-height: 297mm;
-    margin: 0 auto;
-    padding: 12mm 14mm 10mm;
-    box-sizing: border-box;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.25);
-}
-
-.doc-title {
-    font-size: 10pt;
-    margin-bottom: 4px;
-    text-decoration: underline;
-    color: #111;
-}
-
-.format-row {
-    font-size: 9pt;
-    margin-bottom: 6mm;
-    color: #111;
-}
-.format-row label { margin-right: 10px; }
-.cb { display: inline-block; width: 10px; height: 10px; border: 1px solid #555; margin-right: 2px; vertical-align: middle; }
-.cb.checked::after { content: "✓"; font-size: 8pt; line-height: 1; display: block; margin-top: -1px; }
-
-.storyboard {
-    width: 100%;
-    border-collapse: collapse;
-    table-layout: fixed;
-}
-.storyboard thead tr th {
-    background: #d0d0d0;
-    border: 1.2px solid #555;
-    text-align: center;
-    padding: 5px 0;
-    font-size: 9.5pt;
-    font-weight: bold;
-}
-.th-visual { width: 58%; }
-.th-desc   { width: 42%; }
-
-.storyboard tbody tr td {
-    border: 1.2px solid #555;
-    vertical-align: top;
-    padding: 0;
-    height: 58mm;
-}
-.td-visual {
-    border-right: 1.2px dashed #888 !important;
-    padding: 6px 8px;
-    font-size: 9pt;
-    line-height: 1.6;
-    color: #111;
-}
-.td-desc {
-    padding: 6px 8px;
-    font-size: 8.5pt;
-    line-height: 1.7;
-    color: #111;
-}
-
-.panel-place {
-    font-size: 8pt;
-    color: #555;
-    margin-bottom: 4px;
-}
-.panel-chars {
-    font-size: 24pt;
-    line-height: 1.2;
-    margin: 4px 0;
-}
-.panel-balloon {
-    border: 1px solid #888;
-    border-radius: 6px;
-    padding: 3px 7px;
-    font-size: 8.5pt;
-    display: inline-block;
-    margin: 3px 0;
-    background: #fafafa;
-    max-width: 100%;
-}
-.panel-balloon.bad {
-    border-color: #c66;
-    background: #fff4f4;
-}
-.panel-balloon.good {
-    border-color: #6a6;
-    background: #f4fff4;
-}
-.panel-thought {
-    border: 1px dashed #aaa;
-    border-radius: 10px;
-    padding: 3px 7px;
-    font-size: 8pt;
-    color: #555;
-    font-style: italic;
-    display: inline-block;
-    margin: 2px 0;
-    background: #f8f8f8;
-}
-.panel-arrow {
-    text-align: center;
-    font-size: 14pt;
-    color: #555;
-    margin: 3px 0;
-    display: block;
-}
-.panel-result {
-    font-weight: bold;
-    font-size: 9pt;
-    margin-top: 4px;
-    padding: 2px 6px;
-    border-radius: 3px;
+.spk-name {
+    font-size: 15px; font-weight: 700; color: #6af;
+    padding: 3px 12px; margin-bottom: 8px;
+    background: rgba(100,150,255,0.12);
+    border-left: 3px solid #6af;
     display: inline-block;
 }
-.result-bad  { color: #b00; background: #fee; border: 1px solid #f99; }
-.result-good { color: #050; background: #efe; border: 1px solid #9c9; }
+.spk-name.internal {
+    color: #fa9; border-color: #fa9;
+    background: rgba(255,160,80,0.1); font-style: italic;
+}
+.dlg-text {
+    font-size: 17px; line-height: 1.75; color: #e8e8e8; flex: 1;
+    white-space: pre-wrap;
+}
+.dlg-text.internal { color: #fa9; font-style: italic; }
+.click-hint {
+    position: absolute; bottom: 12px; right: 18px;
+    font-size: 11px; color: rgba(255,255,255,0.35);
+    animation: blink 1.2s infinite;
+}
+@keyframes blink { 0%,100%{opacity:0.3} 50%{opacity:1} }
 
-.compare-box {
-    display: flex;
-    gap: 6px;
-    margin-top: 4px;
+/* 選択肢 */
+.choice-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 18px 24px;
+    background: rgba(0,0,18,0.96);
+    border-top: 2px solid rgba(100,150,255,0.35);
 }
-.compare-col {
-    flex: 1;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 4px 6px;
-    font-size: 8pt;
-    background: #fafafa;
+.choice-q {
+    font-size: 16px; font-weight: 700; color: #adf;
+    text-align: center; margin-bottom: 14px;
 }
-.compare-col.bad-col  { border-color: #f99; background: #fff5f5; }
-.compare-col.good-col { border-color: #9c9; background: #f5fff5; }
-.compare-col .col-head { font-weight: bold; font-size: 8pt; margin-bottom: 3px; }
+.choice-btns { display: flex; gap: 14px; }
+.choice-btn {
+    flex: 1; padding: 14px 16px; border: 2px solid;
+    border-radius: 10px; cursor: pointer; background: transparent;
+    color: #fff; font-family: inherit; text-align: left;
+    transition: all 0.2s; line-height: 1.5;
+}
+.choice-btn.bad  { border-color: rgba(255,100,100,0.6); }
+.choice-btn.bad:hover  { background: rgba(255,80,80,0.15); transform: translateY(-2px); border-color: #f66; }
+.choice-btn.good { border-color: rgba(100,255,100,0.6); }
+.choice-btn.good:hover { background: rgba(80,255,80,0.12); transform: translateY(-2px); border-color: #6f6; }
+.btn-label { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+.btn-sub   { font-size: 12px; opacity: 0.6; }
+.bad  .btn-label { color: #f99; }
+.good .btn-label { color: #9f9; }
 
-.desc-head {
-    font-weight: bold;
-    font-size: 9pt;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 3px;
-    margin-bottom: 5px;
-    color: #1a1a6b;
+/* 結果パネル */
+.result-panel {
+    position: absolute;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    background: rgba(0,0,18,0.97);
+    border: 2px solid; border-radius: 14px;
+    padding: 32px 36px; max-width: 620px; width: 92%;
+    text-align: center; z-index: 20;
 }
+.result-panel.bad  { border-color: #f66; }
+.result-panel.good { border-color: #6f6; }
+.res-icon  { font-size: 56px; margin-bottom: 12px; }
+.res-title { font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+.bad  .res-title { color: #f66; }
+.good .res-title { color: #6f6; }
+.res-text { font-size: 14px; line-height: 1.8; color: #ccc; margin-bottom: 16px; white-space: pre-wrap; }
+.res-tip {
+    background: rgba(100,220,100,0.07);
+    border: 1px solid rgba(100,220,100,0.25);
+    border-radius: 8px; padding: 12px 16px;
+    font-size: 13px; color: #9f9;
+    text-align: left; margin-bottom: 18px; line-height: 1.7;
+}
+.res-btn {
+    padding: 12px 32px; font-size: 15px; font-weight: 700;
+    border: 2px solid #6af; border-radius: 30px;
+    background: transparent; color: #6af;
+    cursor: pointer; transition: all 0.2s; font-family: inherit;
+}
+.res-btn:hover { background: rgba(100,150,255,0.18); }
 
-.hosoku {
-    margin-top: 4mm;
-    font-size: 8.5pt;
-    line-height: 1.7;
-    color: #111;
-}
-.hosoku-label {
-    font-weight: bold;
-    font-size: 9pt;
-    margin-bottom: 3px;
-}
-.hosoku-body {
-    border: 1px solid #aaa;
-    border-radius: 3px;
-    padding: 5px 8px;
-    min-height: 14mm;
-    background: #fafafa;
-    font-size: 8.5pt;
-    line-height: 1.7;
-}
+/* ===== エンド画面 ===== */
+#end-screen { background: linear-gradient(135deg, #080f08 0%, #0a160a 50%, #0f1a0a 100%); }
 
-@media print {
-    @page { size: A4; margin: 0; }
-    body   { background: white; padding: 0; }
-    .page  { box-shadow: none; width: 100%; }
-    .print-btn { display: none; }
+.end-wrap {
+    text-align: center; z-index: 1;
+    max-width: 720px; padding: 20px; width: 95%;
+}
+.end-title { font-size: 34px; font-weight: 700; margin-bottom: 6px; }
+.end-score {
+    font-size: 52px; font-weight: 700;
+    margin: 16px 0;
+}
+.tips-box {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px; padding: 20px 24px; text-align: left;
+    margin: 16px 0;
+}
+.tips-heading { font-weight: 700; color: #fff; font-size: 15px; margin-bottom: 14px; }
+.tip-row { display: flex; gap: 12px; margin-bottom: 13px; align-items: flex-start; }
+.tip-num {
+    background: #6af; color: #000;
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 12px; flex-shrink: 0; margin-top: 2px;
+}
+.tip-body { font-size: 13px; line-height: 1.65; color: #bbb; }
+.tip-body strong { color: #adf; }
+.end-msg { font-size: 15px; color: #9f9; margin: 14px 0; line-height: 1.8; }
+.replay-btn {
+    padding: 11px 30px; border: 2px solid #6af;
+    border-radius: 24px; background: transparent;
+    color: #6af; font-size: 14px; cursor: pointer;
+    transition: all 0.2s; font-family: inherit;
+}
+.replay-btn:hover { background: rgba(100,150,255,0.15); }
+
+/* フェードオーバーレイ */
+#fade {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: #000; opacity: 0; pointer-events: none;
+    transition: opacity 0.4s; z-index: 100;
 }
 </style>
 </head>
 <body>
+<div id="game">
 
-<button class="print-btn" onclick="window.print()">🖨️ PDFとして保存（印刷）</button>
+<div id="fade"></div>
 
-<div class="page">
-
-    <div class="doc-title">コミュニケーションスキル 2026 中間発表　絵コンテ（20260623 発表）</div>
-
-    <div class="format-row">
-        当日の発表形式：
-        <label><span class="cb"></span>動画</label>
-        <label><span class="cb checked"></span>寸劇</label>
-        <label><span class="cb"></span>プレゼン</label>
-        <label><span class="cb"></span>その他（　　　　）</label>
-    </div>
-
-    <table class="storyboard">
-        <thead>
-            <tr>
-                <th class="th-visual">絵・場等</th>
-                <th class="th-desc">説明</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            <tr>
-                <td class="td-visual">
-                    <div class="panel-place">📍 教室　コミュニケーションの授業後</div>
-                    <div class="panel-chars">🧑　　👩</div>
-                    <div style="font-size:8pt;color:#555;margin-bottom:4px;">Aさん　　　Bさん</div>
-                    <div class="panel-balloon">Aさん：「次の発表、コミュニケーション不全の例を寸劇にするってどう？」</div><br>
-                    <div class="panel-balloon">Bさん：「いいね。相手の話題を無視して、急に別の話をする例が分かりやすそう。」</div><br>
-                    <div class="panel-balloon">Aさん：「授業でやった『文脈の共有』ができていない例として使えそうだね。」</div><br>
-                    <div class="panel-balloon">Bさん：「そのあと、どう言えばよかったかまで見せれば改善案になると思う。」</div>
-                </td>
-                <td class="td-desc">
-                    <div class="desc-head">【状況設定】</div>
-                    AさんとBさんは、コミュニケーションの授業で発表する寸劇について相談している。<br><br>
-                    会話のテーマは「コミュニケーション不全の例」と「その改善方法」。<br><br>
-                    この時点では、AさんとBさんの間で話題・目的・文脈が共有されている。
-                </td>
-            </tr>
-
-            <tr>
-                <td class="td-visual">
-                    <div class="panel-place">📍 そこへCさんが突然登場</div>
-                    <div class="panel-chars">🧑　👩　🚶</div>
-                    <div style="font-size:8pt;color:#555;margin-bottom:4px;">Aさん　Bさん　Cさん</div>
-                    <div class="panel-balloon bad">Cさん：「あんたって妹と最近どうなん」</div><br>
-                    <div class="panel-balloon">Aさん：「？」</div>
-                    <div class="panel-balloon">Bさん：「？」</div><br>
-                    <div class="panel-balloon bad">Cさん：「🛬🕋」</div>
-                    <span class="panel-arrow">↓</span>
-                    <div class="panel-result result-bad">会話が停止する</div>
-                </td>
-                <td class="td-desc">
-                    <div class="desc-head">【問題場面 ❌】</div>
-                    Cさんは、AさんとBさんが何について話しているかを確認しないまま、突然まったく別の話題を出している。<br><br>
-                    さらに、相手の家族に関する私的な質問をしており、関係性や場面への配慮も足りない。<br><br>
-                    最後に絵文字だけで返しているため、意図が伝わらず、AさんとBさんは反応できなくなる。
-                </td>
-            </tr>
-
-            <tr>
-                <td class="td-visual">
-                    <div style="font-size:8.5pt;font-weight:bold;margin-bottom:4px;">【何が問題だったか】</div>
-                    <div class="compare-box">
-                        <div class="compare-col bad-col">
-                            <div class="col-head">❌ Cさんの行動</div>
-                            ・話題を確認しない<br>
-                            ・急に私的な質問をする<br>
-                            ・相手の困惑を見ても説明しない<br>
-                            ・絵文字だけで返す<br><br>
-                            → 意図が伝わらない
-                        </div>
-                        <div class="compare-col good-col">
-                            <div class="col-head">✅ 必要な配慮</div>
-                            ・今の話題を確認する<br>
-                            ・会話に入ってよいか聞く<br>
-                            ・関係ない話は後にする<br>
-                            ・言葉で意図を説明する<br><br>
-                            → 会話が続く
-                        </div>
-                    </div>
-                </td>
-                <td class="td-desc">
-                    <div class="desc-head">【分析】</div>
-                    この例のコミュニケーション不全は、単に「変なことを言った」ことではない。<br><br>
-                    主な原因は、<strong>文脈の無視</strong>、<strong>話題転換の唐突さ</strong>、<strong>相手との距離感の誤り</strong>、<strong>言語化不足</strong>である。<br><br>
-                    AさんとBさんが「？」となっている時点で、Cさんは自分の発言意図を説明する必要があった。
-                </td>
-            </tr>
-
-            <tr>
-                <td class="td-visual">
-                    <div class="panel-place">📍 改善後のCさん</div>
-                    <div class="panel-chars">🚶　🧑　👩</div>
-                    <div class="panel-balloon good">Cさん：「今、授業の発表について話してた？途中から聞こえたんだけど、入ってもいい？」</div><br>
-                    <div class="panel-balloon">Aさん：「うん、コミュニケーション不全の例を考えてた。」</div><br>
-                    <div class="panel-balloon good">Cさん：「じゃあ、急に関係ない私的な話題を出す例とかどう？例えば、家族の話を突然聞くみたいな。」</div><br>
-                    <div class="panel-balloon">Bさん：「それなら授業内容にも合うね。」</div>
-                    <span class="panel-arrow">↓</span>
-                    <div class="panel-result result-good">会話が継続する</div>
-                </td>
-                <td class="td-desc">
-                    <div class="desc-head">【解決策 ✅】</div>
-                    <strong>対策：会話に入る前に、文脈と許可を確認する。</strong><br><br>
-                    ① 今の話題を確認する<br>
-                    　「何の話をしてた？」<br>
-                    ② 会話に入ってよいか聞く<br>
-                    　「入ってもいい？」<br>
-                    ③ 関係ない話題は、目的に合わせて説明してから出す<br><br>
-                    → 相手が理解できる形で話せば、同じ内容でも会話の材料になる。
-                </td>
-            </tr>
-
-        </tbody>
-    </table>
-
-    <div class="hosoku">
-        <div class="hosoku-label">補足説明</div>
-        <div class="hosoku-body">
-            この寸劇では、Cさんの発言そのものの奇妙さよりも、「相手が共有している文脈を確認せずに割り込むこと」が問題であると示す。
-            コミュニケーションでは、話す内容だけでなく、タイミング・相手との距離感・話題のつながり・意図の説明が重要である。
+<!-- ===== タイトル画面 ===== -->
+<div class="screen active" id="title-screen">
+    <div class="stars" id="stars"></div>
+    <div class="title-wrap">
+        <div class="title-badge">Communication Breakdown Game</div>
+        <div class="title-main">コミュニケーション不全ラボ</div>
+        <div class="title-sub">〜 Cさんの乱入を修復せよ 〜</div>
+        <div class="title-card">
+            <strong>AさんとBさん</strong>は、コミュニケーションの授業で使う寸劇について話しています。<br><br>
+            そこへ突然Cさんが現れ、<span class="bad-tag">文脈を無視した質問</span>と<span class="bad-tag">謎の絵文字</span>で会話を止めてしまいます。<br><br>
+            まずはアカン例を見て、どこが問題なのかを選び、最後に<span class="good-tag">会話が続く言い方</span>へ直してください。
         </div>
+        <button class="start-btn" onclick="startGame()">▶ アカン例を見る</button>
     </div>
+</div>
+
+<!-- ===== シーン画面 ===== -->
+<div class="screen" id="scene-screen">
+    <div class="scene-bg" id="scene-bg"></div>
+
+    <div class="hud">
+        <div class="scene-label" id="scene-label">シーン1</div>
+        <div class="progress-dots" id="progress-dots"></div>
+        <div class="score-hud">理解度 <span id="score-val">0</span> / 3</div>
+    </div>
+
+    <div class="location-tag" id="location-tag"></div>
+    <div class="char-area" id="char-area"></div>
+
+    <div class="dialogue-box" id="dlg-box" onclick="handleClick()">
+        <div class="spk-name" id="spk-name"></div>
+        <div class="dlg-text" id="dlg-text"></div>
+        <div class="click-hint">クリックして続ける ▼</div>
+    </div>
+
+    <div class="choice-overlay" id="choice-overlay" style="display:none">
+        <div class="choice-q" id="choice-q"></div>
+        <div class="choice-btns" id="choice-btns"></div>
+    </div>
+
+    <div class="result-panel" id="result-panel" style="display:none">
+        <div class="res-icon" id="res-icon"></div>
+        <div class="res-title" id="res-title"></div>
+        <div class="res-text" id="res-text"></div>
+        <div class="res-tip" id="res-tip" style="display:none"></div>
+        <button class="res-btn" id="res-btn"></button>
+    </div>
+</div>
+
+<!-- ===== エンド画面 ===== -->
+<div class="screen" id="end-screen">
+    <div class="end-wrap">
+        <div class="end-title">🎊 修復完了！</div>
+        <div class="end-score" id="end-score"></div>
+        <div class="tips-box" id="tips-box"></div>
+        <div class="end-msg">
+            唐突な乱入も、文脈確認・許可取り・意図の言語化を入れるだけで、<br>
+            授業で使える「コミュニケーション不全の例」に変えられます。
+        </div>
+        <button class="replay-btn" onclick="restartGame()">もう一度プレイする</button>
+    </div>
+</div>
 
 </div>
 
+<script>
+/* ========== ゲームデータ ========== */
+const SCENES = [
+  {
+    title: "シーン1：まずはアカン例",
+    location: "📍 教室　コミュニケーションの授業後",
+    bg: "linear-gradient(180deg,#071830 0%,#050d20 65%,#030810 100%)",
+    chars: { L: { emoji:"🧑‍🤝‍🧑", name:"Aさん・Bさん" }, R: { emoji:"🚶", name:"Cさん" } },
+    dialogues: [
+      { spk:"Aさん", side:"L", text:"次の発表、コミュニケーション不全の例を寸劇にするってどう？" },
+      { spk:"Bさん", side:"L", text:"いいね。相手の話題を無視して、急に別の話をする例が分かりやすそう。" },
+      { spk:"Aさん", side:"L", text:"授業でやった『文脈の共有』ができていない例として使えそうだね。" },
+      { spk:"Bさん", side:"L", text:"そのあと、どう言えばよかったかまで見せれば改善案になると思う。" },
+      { spk:"Cさん", side:"R", text:"あんたって妹と最近どうなん" },
+      { spk:"Aさん", side:"L", text:"？" },
+      { spk:"Bさん", side:"L", text:"？" },
+      { spk:"Cさん", side:"R", text:"🛬🕋" },
+      { spk:"ナレーション", side:null, text:"会話は完全に停止した。AさんとBさんは、何を返せばいいのか分からない。" }
+    ],
+    choiceQ: "⚡ この場面で一番アカンところは？",
+    choices: [
+      {
+        type:"bad", label:"絵文字を使ったことだけが問題", sub:"文字ではなく言葉で話せば全部OK",
+        after:[
+          { spk:"あなた", side:"L", text:"絵文字じゃなくて普通の日本語にすればよかったんだと思う。" },
+          { spk:"先生", side:"L", text:"それも一部ですが、本質はそこだけではありません。" },
+          { spk:"先生", side:"L", text:"Cさんは、会話の流れも、相手との距離感も、発言の意図も共有できていません。" }
+        ],
+        explain:"絵文字だけで返したことは問題ですが、それ以前に、Cさんは会話の文脈を確認せず、突然私的な質問をしています。問題を浅く捉えると改善につながりません。",
+        tip:null
+      },
+      {
+        type:"good", label:"文脈を確認せず、急に私的な話をしたこと", sub:"話題・距離感・意図の共有がない",
+        after:[
+          { spk:"あなた", side:"L", text:"Cさんは、今の話題を確認せずに入ってきて、しかも急に私的な質問をしたのが問題だと思う。" },
+          { spk:"先生", side:"L", text:"その通りです。さらに、相手が困惑したあとも意図を説明していません。" },
+          { spk:"先生", side:"L", text:"これは『文脈の無視』『距離感の誤り』『言語化不足』が重なった例です。" }
+        ],
+        explain:"",
+        tip:"💡 ポイント：コミュニケーション不全は、発言内容だけでなく、タイミング・関係性・相手の理解状況によって起きます。"
+      }
+    ]
+  },
+  {
+    title: "シーン2：会話に入る前の修復",
+    location: "📍 同じ教室　もう一度やり直し",
+    bg: "linear-gradient(180deg,#081a08 0%,#050e05 65%,#030803 100%)",
+    chars: { L: { emoji:"🧑‍🤝‍🧑", name:"Aさん・Bさん" }, R: { emoji:"🚶", name:"Cさん" } },
+    dialogues: [
+      { spk:"Aさん", side:"L", text:"次の発表、コミュニケーション不全の例を寸劇にするってどう？" },
+      { spk:"Bさん", side:"L", text:"いいね。相手の話題を無視して、急に別の話をする例が分かりやすそう。" },
+      { spk:"Cさん（心の声）", side:"R", text:"今なら話に入れそう。でも、いきなり本題を投げるとまた止まりそうだ。", internal:true }
+    ],
+    choiceQ: "⚡ Cさんは最初にどう入る？",
+    choices: [
+      {
+        type:"bad", label:"「あんたって妹と最近どうなん」", sub:"前と同じように突然聞く",
+        after:[
+          { spk:"Cさん", side:"R", text:"あんたって妹と最近どうなん" },
+          { spk:"Aさん", side:"L", text:"またそれ？ 今その話してないけど……" },
+          { spk:"Bさん", side:"L", text:"何のために聞いてるのか分からない。" }
+        ],
+        explain:"話題を変える前に、今の会話へ入ってよいかを確認する必要があります。突然の私的質問は、相手に防御反応や困惑を生みます。",
+        tip:null
+      },
+      {
+        type:"good", label:"「今、発表の話してた？入ってもいい？」", sub:"文脈確認と許可取りをする",
+        after:[
+          { spk:"Cさん", side:"R", text:"今、授業の発表について話してた？途中から聞こえたんだけど、入ってもいい？" },
+          { spk:"Aさん", side:"L", text:"うん、コミュニケーション不全の例を考えてた。" },
+          { spk:"Bさん", side:"L", text:"入って大丈夫。何か案ある？" }
+        ],
+        explain:"",
+        tip:"💡 ポイント：会話に途中参加するときは、『何の話か』『入ってよいか』を先に確認すると、相手が受け取りやすくなります。"
+      }
+    ]
+  },
+  {
+    title: "シーン3：変な発言を教材に変える",
+    location: "📍 教室　改善案づくり",
+    bg: "linear-gradient(180deg,#180a20 0%,#0f0515 65%,#080310 100%)",
+    chars: { L: { emoji:"🧑‍🤝‍🧑", name:"Aさん・Bさん" }, R: { emoji:"🚶", name:"Cさん" } },
+    dialogues: [
+      { spk:"Aさん", side:"L", text:"じゃあ、文脈を無視して話題を変える例を考えたいんだけど……" },
+      { spk:"Bさん", side:"L", text:"相手が『？』ってなるくらい唐突な例があると伝わりやすいよね。" },
+      { spk:"Cさん（心の声）", side:"R", text:"さっきの妹の話、使い方を間違えなければ例として使えるかもしれない。", internal:true }
+    ],
+    choiceQ: "⚡ Cさんはどう提案する？",
+    choices: [
+      {
+        type:"bad", label:"「で、妹と最近どうなん。🛬🕋」", sub:"結局また同じことをする",
+        after:[
+          { spk:"Cさん", side:"R", text:"で、妹と最近どうなん。🛬🕋" },
+          { spk:"Aさん", side:"L", text:"いや、だから何の話？" },
+          { spk:"Bさん", side:"L", text:"例として使いたいなら、先にそう説明して。" }
+        ],
+        explain:"同じ内容でも、目的を説明せずに投げると、ただの唐突な私的質問になります。絵文字も補足説明がなければ意味が共有されません。",
+        tip:null
+      },
+      {
+        type:"good", label:"「急に家族の話を聞く例とかどう？」", sub:"目的を説明してから例にする",
+        after:[
+          { spk:"Cさん", side:"R", text:"例えば、会話に急に入って『妹と最近どうなん』みたいな私的な話を聞く例はどう？文脈が切れるから分かりやすいと思う。" },
+          { spk:"Aさん", side:"L", text:"それなら、コミュニケーション不全の例として使えるね。" },
+          { spk:"Bさん", side:"L", text:"改善後は『今の話に入っていい？』から始める形にしよう。" }
+        ],
+        explain:"",
+        tip:"💡 ポイント：突飛な内容でも、『これは例として出している』と目的を言語化すれば、相手は意図を理解できます。"
+      }
+    ]
+  }
+];
+
+/* ========== ゲーム状態 ========== */
+let sceneIdx = 0, dlgIdx = 0, score = 0;
+let phase = 'dlg'; // dlg / choice / after / result
+let chosen = null, afterIdx = 0;
+let typing = false, typeTimer = null, fullTxt = '';
+
+/* ========== 初期化 ========== */
+function initStars() {
+    const c = document.getElementById('stars');
+    c.innerHTML = '';
+    for (let i = 0; i < 120; i++) {
+        const s = document.createElement('div');
+        s.className = 'star';
+        const sz = Math.random() * 2.5 + 0.5;
+        s.style.cssText = `width:${sz}px;height:${sz}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--dur:${(Math.random()*3+2).toFixed(1)}s`;
+        c.appendChild(s);
+    }
+}
+
+function showScreen(id) {
+    fade(0.6, () => {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        fade(0, null);
+    });
+}
+
+function fade(to, cb) {
+    const el = document.getElementById('fade');
+    el.style.opacity = to;
+    el.style.pointerEvents = to > 0 ? 'all' : 'none';
+    if (cb) setTimeout(cb, 420);
+}
+
+function startGame() {
+    sceneIdx = 0; score = 0;
+    showScreen('scene-screen');
+    setTimeout(() => loadScene(), 450);
+}
+
+function restartGame() {
+    sceneIdx = 0; score = 0;
+    showScreen('scene-screen');
+    setTimeout(() => loadScene(), 450);
+}
+
+/* ========== シーン ========== */
+function loadScene() {
+    const s = SCENES[sceneIdx];
+    dlgIdx = 0; phase = 'dlg'; chosen = null; afterIdx = 0;
+
+    document.getElementById('scene-bg').style.background = s.bg;
+    document.getElementById('scene-label').textContent = s.title;
+    document.getElementById('location-tag').textContent = s.location;
+    updateDots(); updateScore();
+
+    document.getElementById('choice-overlay').style.display = 'none';
+    document.getElementById('result-panel').style.display = 'none';
+    document.getElementById('dlg-box').style.display = 'flex';
+
+    renderChars(null);
+    showDlg(s.dialogues[0]);
+}
+
+function updateDots() {
+    const el = document.getElementById('progress-dots');
+    el.innerHTML = '';
+    SCENES.forEach((_, i) => {
+        const d = document.createElement('div');
+        d.className = 'dot' + (i < sceneIdx ? ' done' : i === sceneIdx ? ' active' : '');
+        el.appendChild(d);
+    });
+}
+
+function updateScore() {
+    document.getElementById('score-val').textContent = score;
+}
+
+function renderChars(speakSide) {
+    const s = SCENES[sceneIdx];
+    const area = document.getElementById('char-area');
+    area.innerHTML = '';
+    ['L', 'R'].forEach(side => {
+        const ch = s.chars[side];
+        const box = document.createElement('div');
+        box.className = 'char-box' +
+            (speakSide === side ? ' speaking' : speakSide !== null ? ' dim' : '');
+        box.innerHTML = `<span class="char-emoji">${ch.emoji}</span><div class="char-name">${ch.name}</div>`;
+        area.appendChild(box);
+    });
+}
+
+/* ========== タイプライター ========== */
+function typewrite(el, txt, done) {
+    typing = true; fullTxt = txt; el.textContent = ''; let i = 0;
+    function step() {
+        if (i < txt.length) { el.textContent += txt[i++]; typeTimer = setTimeout(step, 28); }
+        else { typing = false; if (done) done(); }
+    }
+    step();
+}
+function skipType() {
+    if (typeTimer) clearTimeout(typeTimer);
+    typing = false;
+    document.getElementById('dlg-text').textContent = fullTxt;
+}
+
+/* ========== 台詞表示 ========== */
+function showDlg(d) {
+    const nameEl = document.getElementById('spk-name');
+    const textEl = document.getElementById('dlg-text');
+    nameEl.textContent = d.spk;
+    nameEl.className = 'spk-name' + (d.internal ? ' internal' : '');
+    textEl.className = 'dlg-text' + (d.internal ? ' internal' : '');
+    renderChars(d.side || null);
+    typewrite(textEl, d.text, null);
+}
+
+/* ========== クリック処理 ========== */
+function handleClick() {
+    if (typing) { skipType(); return; }
+    advancePhase();
+}
+
+function advancePhase() {
+    const s = SCENES[sceneIdx];
+    if (phase === 'dlg') {
+        dlgIdx++;
+        if (dlgIdx < s.dialogues.length) { showDlg(s.dialogues[dlgIdx]); }
+        else { showChoices(); }
+    } else if (phase === 'after') {
+        afterIdx++;
+        const arr = chosen.after;
+        if (afterIdx < arr.length) { showDlg(arr[afterIdx]); }
+        else { showResult(); }
+    }
+}
+
+/* ========== 選択肢 ========== */
+function showChoices() {
+    const s = SCENES[sceneIdx];
+    document.getElementById('dlg-box').style.display = 'none';
+    renderChars(null);
+    document.getElementById('choice-q').textContent = s.choiceQ;
+    const btns = document.getElementById('choice-btns');
+    btns.innerHTML = '';
+    s.choices.forEach((c, i) => {
+        const b = document.createElement('button');
+        b.className = `choice-btn ${c.type}`;
+        b.innerHTML = `<div class="btn-label">${c.label}</div><div class="btn-sub">${c.sub}</div>`;
+        b.onclick = () => selectChoice(i);
+        btns.appendChild(b);
+    });
+    document.getElementById('choice-overlay').style.display = 'block';
+    phase = 'choice';
+}
+
+function selectChoice(idx) {
+    chosen = SCENES[sceneIdx].choices[idx];
+    document.getElementById('choice-overlay').style.display = 'none';
+    document.getElementById('dlg-box').style.display = 'flex';
+    phase = 'after'; afterIdx = 0;
+    showDlg(chosen.after[0]);
+}
+
+/* ========== 結果 ========== */
+function showResult() {
+    document.getElementById('dlg-box').style.display = 'none';
+    const panel  = document.getElementById('result-panel');
+    const icon   = document.getElementById('res-icon');
+    const title  = document.getElementById('res-title');
+    const text   = document.getElementById('res-text');
+    const tipEl  = document.getElementById('res-tip');
+    const btn    = document.getElementById('res-btn');
+
+    if (chosen.type === 'bad') {
+        panel.className = 'result-panel bad';
+        icon.textContent  = '😵';
+        title.textContent = 'まだアカン！';
+        text.textContent  = chosen.explain;
+        tipEl.style.display = 'none';
+        btn.textContent = 'もう一度選ぶ';
+        btn.onclick = retryChoice;
+    } else {
+        score++; updateScore();
+        panel.className = 'result-panel good';
+        icon.textContent  = '✅';
+        title.textContent = 'いい感じ！';
+        text.textContent  = '問題点を正しく捉え、会話が続く方向へ修復できました。';
+        tipEl.style.display = 'block';
+        tipEl.textContent  = chosen.tip;
+        if (sceneIdx < SCENES.length - 1) {
+            btn.textContent = '次のシーンへ →';
+            btn.onclick = nextScene;
+        } else {
+            btn.textContent = 'ゲームクリア！ 🎊';
+            btn.onclick = showEnd;
+        }
+    }
+    panel.style.display = 'block';
+    phase = 'result';
+}
+
+function retryChoice() {
+    document.getElementById('result-panel').style.display = 'none';
+    showChoices();
+}
+
+function nextScene() {
+    document.getElementById('result-panel').style.display = 'none';
+    sceneIdx++;
+    loadScene();
+}
+
+/* ========== エンド ========== */
+function showEnd() {
+    showScreen('end-screen');
+    setTimeout(() => {
+        const sc = document.getElementById('end-score');
+        if (score === 3) {
+            sc.innerHTML = `⭐ ${score} / 3 ⭐<br><span style="font-size:18px;color:#ff9">パーフェクト！</span>`;
+            sc.style.color = '#ffd';
+        } else if (score >= 2) {
+            sc.innerHTML = `✅ ${score} / 3<br><span style="font-size:18px;color:#9f9">よくできました！</span>`;
+            sc.style.color = '#9f9';
+        } else {
+            sc.innerHTML = `📚 ${score} / 3<br><span style="font-size:18px;color:#fa9">もう一度挑戦しよう！</span>`;
+            sc.style.color = '#fa9';
+        }
+
+        const box = document.getElementById('tips-box');
+        box.innerHTML = '<div class="tips-heading">📋 今日のポイントまとめ</div>';
+        SCENES.forEach((s, i) => {
+            const good = s.choices.find(c => c.type === 'good');
+            const row = document.createElement('div');
+            row.className = 'tip-row';
+            row.innerHTML = `
+                <div class="tip-num">${i+1}</div>
+                <div class="tip-body"><strong>${s.title}</strong><br>
+                ${good.tip.replace('💡 ポイント：','')}</div>`;
+            box.appendChild(row);
+        });
+    }, 500);
+}
+
+/* ========== 起動 ========== */
+initStars();
+</script>
 </body>
 </html>
