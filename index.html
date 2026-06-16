@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>絵コンテ〜コミュニケーション改善〜</title>
+<title>絵コンテ〜コミュニケーション不全例〜</title>
 <style>
 body {
     font-family: 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif;
@@ -26,7 +26,6 @@ body {
 }
 .print-btn:hover { background: #222; }
 
-/* A4ページ */
 .page {
     background: white;
     width: 210mm;
@@ -37,7 +36,6 @@ body {
     box-shadow: 0 2px 16px rgba(0,0,0,0.25);
 }
 
-/* タイトル行 */
 .doc-title {
     font-size: 10pt;
     margin-bottom: 4px;
@@ -45,7 +43,6 @@ body {
     color: #111;
 }
 
-/* 発表形式行 */
 .format-row {
     font-size: 9pt;
     margin-bottom: 6mm;
@@ -55,14 +52,11 @@ body {
 .cb { display: inline-block; width: 10px; height: 10px; border: 1px solid #555; margin-right: 2px; vertical-align: middle; }
 .cb.checked::after { content: "✓"; font-size: 8pt; line-height: 1; display: block; margin-top: -1px; }
 
-/* メインテーブル */
 .storyboard {
     width: 100%;
     border-collapse: collapse;
     table-layout: fixed;
 }
-
-/* ヘッダー行 */
 .storyboard thead tr th {
     background: #d0d0d0;
     border: 1.2px solid #555;
@@ -74,15 +68,12 @@ body {
 .th-visual { width: 58%; }
 .th-desc   { width: 42%; }
 
-/* セル共通 */
 .storyboard tbody tr td {
     border: 1.2px solid #555;
     vertical-align: top;
     padding: 0;
     height: 58mm;
 }
-
-/* 左列（絵・場等）*/
 .td-visual {
     border-right: 1.2px dashed #888 !important;
     padding: 6px 8px;
@@ -90,8 +81,6 @@ body {
     line-height: 1.6;
     color: #111;
 }
-
-/* 右列（説明）*/
 .td-desc {
     padding: 6px 8px;
     font-size: 8.5pt;
@@ -99,19 +88,16 @@ body {
     color: #111;
 }
 
-/* 絵パネル内スタイル */
 .panel-place {
     font-size: 8pt;
     color: #555;
     margin-bottom: 4px;
 }
-
 .panel-chars {
-    font-size: 26pt;
+    font-size: 24pt;
     line-height: 1.2;
     margin: 4px 0;
 }
-
 .panel-balloon {
     border: 1px solid #888;
     border-radius: 6px;
@@ -122,7 +108,14 @@ body {
     background: #fafafa;
     max-width: 100%;
 }
-
+.panel-balloon.bad {
+    border-color: #c66;
+    background: #fff4f4;
+}
+.panel-balloon.good {
+    border-color: #6a6;
+    background: #f4fff4;
+}
 .panel-thought {
     border: 1px dashed #aaa;
     border-radius: 10px;
@@ -134,7 +127,6 @@ body {
     margin: 2px 0;
     background: #f8f8f8;
 }
-
 .panel-arrow {
     text-align: center;
     font-size: 14pt;
@@ -142,7 +134,6 @@ body {
     margin: 3px 0;
     display: block;
 }
-
 .panel-result {
     font-weight: bold;
     font-size: 9pt;
@@ -171,7 +162,6 @@ body {
 .compare-col.good-col { border-color: #9c9; background: #f5fff5; }
 .compare-col .col-head { font-weight: bold; font-size: 8pt; margin-bottom: 3px; }
 
-/* 説明列内スタイル */
 .desc-head {
     font-weight: bold;
     font-size: 9pt;
@@ -181,7 +171,6 @@ body {
     color: #1a1a6b;
 }
 
-/* 補足説明エリア */
 .hosoku {
     margin-top: 4mm;
     font-size: 8.5pt;
@@ -203,7 +192,6 @@ body {
     line-height: 1.7;
 }
 
-/* 印刷 */
 @media print {
     @page { size: A4; margin: 0; }
     body   { background: white; padding: 0; }
@@ -237,91 +225,94 @@ body {
         </thead>
         <tbody>
 
-            <!-- パネル1：状況設定 -->
             <tr>
                 <td class="td-visual">
-                    <div class="panel-place">📍 オフィス会議室　月次企画会議</div>
-                    <div class="panel-chars">👔　　🧑</div>
-                    <div style="font-size:8pt;color:#555;margin-bottom:4px;">上司　　　Uさん</div>
-                    <div class="panel-balloon">上司：「今月の新企画について、Uさんから提案があると聞きました。どうぞ。」</div><br>
-                    <div class="panel-thought">Uさん（心の声）：「やばい…緊張する。いつもの語録で乗り切るか！」</div>
+                    <div class="panel-place">📍 教室　コミュニケーションの授業後</div>
+                    <div class="panel-chars">🧑　　👩</div>
+                    <div style="font-size:8pt;color:#555;margin-bottom:4px;">Aさん　　　Bさん</div>
+                    <div class="panel-balloon">Aさん：「次の発表、コミュニケーション不全の例を寸劇にするってどう？」</div><br>
+                    <div class="panel-balloon">Bさん：「いいね。相手の話題を無視して、急に別の話をする例が分かりやすそう。」</div><br>
+                    <div class="panel-balloon">Aさん：「授業でやった『文脈の共有』ができていない例として使えそうだね。」</div><br>
+                    <div class="panel-balloon">Bさん：「そのあと、どう言えばよかったかまで見せれば改善案になると思う。」</div>
                 </td>
                 <td class="td-desc">
                     <div class="desc-head">【状況設定】</div>
-                    Uさんは少しASDっぽい特性があり、緊張すると某ネット有名人の語録でコミュニケーションをとってしまう。<br><br>
-                    今日は月次企画会議で、上司から新企画の提案を求められた。
+                    AさんとBさんは、コミュニケーションの授業で発表する寸劇について相談している。<br><br>
+                    会話のテーマは「コミュニケーション不全の例」と「その改善方法」。<br><br>
+                    この時点では、AさんとBさんの間で話題・目的・文脈が共有されている。
                 </td>
             </tr>
 
-            <!-- パネル2：問題発生 -->
             <tr>
                 <td class="td-visual">
-                    <div class="panel-chars">🧑</div>
-                    <div class="panel-balloon">Uさん：「やらないか？」</div>
+                    <div class="panel-place">📍 そこへCさんが突然登場</div>
+                    <div class="panel-chars">🧑　👩　🚶</div>
+                    <div style="font-size:8pt;color:#555;margin-bottom:4px;">Aさん　Bさん　Cさん</div>
+                    <div class="panel-balloon bad">Cさん：「あんたって妹と最近どうなん」</div><br>
+                    <div class="panel-balloon">Aさん：「？」</div>
+                    <div class="panel-balloon">Bさん：「？」</div><br>
+                    <div class="panel-balloon bad">Cさん：「🛬🕋」</div>
                     <span class="panel-arrow">↓</span>
-                    <div class="panel-chars" style="font-size:20pt;">👔😤　😶😶</div>
-                    <div style="font-size:8pt;color:#555;margin-bottom:4px;">上司（怒）　同僚（困惑）</div>
-                    <div class="panel-balloon">上司：「Uさん、真剣にお願いします。」</div>
+                    <div class="panel-result result-bad">会話が停止する</div>
                 </td>
                 <td class="td-desc">
                     <div class="desc-head">【問題場面 ❌】</div>
-                    フォーマルな場で某ネット有名人の語録を使用。<br><br>
-                    意図が全く伝わらず、上司・同僚が困惑。上司に注意され、提案の機会も失う。<br><br>
-                    → <strong>コミュニケーション失敗</strong>
+                    Cさんは、AさんとBさんが何について話しているかを確認しないまま、突然まったく別の話題を出している。<br><br>
+                    さらに、相手の家族に関する私的な質問をしており、関係性や場面への配慮も足りない。<br><br>
+                    最後に絵文字だけで返しているため、意図が伝わらず、AさんとBさんは反応できなくなる。
                 </td>
             </tr>
 
-            <!-- パネル3：解決策 -->
             <tr>
                 <td class="td-visual">
-                    <div class="panel-chars">🧑📋</div>
-                    <div class="panel-balloon">Uさん：「ぜひ取り組ませていただきたいと思います。SNS活用によるマーケティング強化を提案します。」</div>
-                    <span class="panel-arrow">↓</span>
-                    <div class="panel-chars" style="font-size:20pt;">👔😊</div>
-                    <div class="panel-balloon">上司：「具体的でわかりやすいですね。素晴らしい！」</div>
-                </td>
-                <td class="td-desc">
-                    <div class="desc-head">【解決策 ✅】</div>
-                    <strong>対策：その場に応じた適切なコミュニケーション</strong><br><br>
-                    ① 敬語を使う<br>
-                    　（「〜させていただきます」等）<br>
-                    ② 具体的な内容を添える<br>
-                    　（数字・根拠・提案内容）<br>
-                    ③ 事前に資料を準備する<br><br>
-                    → <strong>コミュニケーション成功</strong>
-                </td>
-            </tr>
-
-            <!-- パネル4：比較まとめ -->
-            <tr>
-                <td class="td-visual">
-                    <div style="font-size:8.5pt;font-weight:bold;margin-bottom:4px;">【Before / After 比較】</div>
+                    <div style="font-size:8.5pt;font-weight:bold;margin-bottom:4px;">【何が問題だったか】</div>
                     <div class="compare-box">
                         <div class="compare-col bad-col">
-                            <div class="col-head">❌ Before</div>
-                            <div style="font-size:14pt;text-align:center;">🧑</div>
-                            「やらないか？」<br>
-                            <span style="font-size:7.5pt;color:#888;">（某語録）</span><br><br>
-                            👔「え……？」<br>
-                            → 信頼を失う
+                            <div class="col-head">❌ Cさんの行動</div>
+                            ・話題を確認しない<br>
+                            ・急に私的な質問をする<br>
+                            ・相手の困惑を見ても説明しない<br>
+                            ・絵文字だけで返す<br><br>
+                            → 意図が伝わらない
                         </div>
                         <div class="compare-col good-col">
-                            <div class="col-head">✅ After</div>
-                            <div style="font-size:14pt;text-align:center;">🧑</div>
-                            「ぜひ取り組ませていただきます」<br>
-                            <span style="font-size:7.5pt;color:#888;">（敬語＋具体的内容）</span><br><br>
-                            👔「素晴らしい！」<br>
-                            → 信頼を得る
+                            <div class="col-head">✅ 必要な配慮</div>
+                            ・今の話題を確認する<br>
+                            ・会話に入ってよいか聞く<br>
+                            ・関係ない話は後にする<br>
+                            ・言葉で意図を説明する<br><br>
+                            → 会話が続く
                         </div>
                     </div>
                 </td>
                 <td class="td-desc">
-                    <div class="desc-head">【解決策のまとめ】</div>
-                    ASD的特性があっても、<strong>場面を意識した準備</strong>と<strong>言葉の選択</strong>により適切なコミュニケーションが可能になる。<br><br>
-                    フォーマルな場では：<br>
-                    ・ネットミームや普段使いの語録は使わない<br>
-                    ・敬語＋具体的な内容でアピール<br>
-                    ・事前準備で緊張を軽減する
+                    <div class="desc-head">【分析】</div>
+                    この例のコミュニケーション不全は、単に「変なことを言った」ことではない。<br><br>
+                    主な原因は、<strong>文脈の無視</strong>、<strong>話題転換の唐突さ</strong>、<strong>相手との距離感の誤り</strong>、<strong>言語化不足</strong>である。<br><br>
+                    AさんとBさんが「？」となっている時点で、Cさんは自分の発言意図を説明する必要があった。
+                </td>
+            </tr>
+
+            <tr>
+                <td class="td-visual">
+                    <div class="panel-place">📍 改善後のCさん</div>
+                    <div class="panel-chars">🚶　🧑　👩</div>
+                    <div class="panel-balloon good">Cさん：「今、授業の発表について話してた？途中から聞こえたんだけど、入ってもいい？」</div><br>
+                    <div class="panel-balloon">Aさん：「うん、コミュニケーション不全の例を考えてた。」</div><br>
+                    <div class="panel-balloon good">Cさん：「じゃあ、急に関係ない私的な話題を出す例とかどう？例えば、家族の話を突然聞くみたいな。」</div><br>
+                    <div class="panel-balloon">Bさん：「それなら授業内容にも合うね。」</div>
+                    <span class="panel-arrow">↓</span>
+                    <div class="panel-result result-good">会話が継続する</div>
+                </td>
+                <td class="td-desc">
+                    <div class="desc-head">【解決策 ✅】</div>
+                    <strong>対策：会話に入る前に、文脈と許可を確認する。</strong><br><br>
+                    ① 今の話題を確認する<br>
+                    　「何の話をしてた？」<br>
+                    ② 会話に入ってよいか聞く<br>
+                    　「入ってもいい？」<br>
+                    ③ 関係ない話題は、目的に合わせて説明してから出す<br><br>
+                    → 相手が理解できる形で話せば、同じ内容でも会話の材料になる。
                 </td>
             </tr>
 
@@ -331,10 +322,12 @@ body {
     <div class="hosoku">
         <div class="hosoku-label">補足説明</div>
         <div class="hosoku-body">
-            Uさんのようにコミュニケーションに難しさを感じる人でも、「どの場面でどんな言葉が適切か」を事前に考え準備しておくことで、フォーマルな場面でも円滑なコミュニケーションができる。大切なのは「その場のコンテクストを読む力」を意識的に身につけること。
+            この寸劇では、Cさんの発言そのものの奇妙さよりも、「相手が共有している文脈を確認せずに割り込むこと」が問題であると示す。
+            コミュニケーションでは、話す内容だけでなく、タイミング・相手との距離感・話題のつながり・意図の説明が重要である。
         </div>
     </div>
 
 </div>
+
 </body>
 </html>
