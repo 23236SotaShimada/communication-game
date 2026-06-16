@@ -20,7 +20,7 @@
     <div class="title-sub">〜 3つの失敗をやり直せ 〜</div>
     <div class="title-card">
       <strong>コミュニケーションの授業発表</strong>を準備する中で、3種類の失敗が起きます。<br><br>
-      1つ目は<span class="tag-bad">文脈無視の乱入</span>、2つ目は<span class="tag-bad">曖昧な作業依頼</span>、3つ目は<span class="tag-bad">本番中の決めつけ</span>です。<br><br>
+      1つ目は<span class="tag-bad">文脈無視の乱入</span>、2つ目は<span class="tag-bad">曖昧な作業依頼</span>、3つ目は<span class="tag-bad">発表中の助け方ミス</span>です。<br><br>
       まずアカン例を見て、失敗ポップアップ後に<span class="tag-good">会話が続く選択</span>をしてください。
     </div>
     <button class="start-btn" onclick="startGame()">▶ アカン例を見る</button>
@@ -29,39 +29,16 @@
 
 <div class="screen" id="scene-screen">
   <div class="scene-bg" id="scene-bg"></div>
-  <div class="hud">
-    <div class="scene-label" id="scene-label"></div>
-    <div class="progress-dots" id="progress-dots"></div>
-    <div class="score-hud">修復数 <span id="score-val">0</span> / 3</div>
-  </div>
+  <div class="hud"><div class="scene-label" id="scene-label"></div><div class="progress-dots" id="progress-dots"></div><div class="score-hud">修復数 <span id="score-val">0</span> / 3</div></div>
   <div class="location-tag" id="location-tag"></div>
   <div class="char-area" id="char-area"></div>
-  <div class="dialogue-box" id="dlg-box" onclick="handleClick()">
-    <div class="spk-name" id="spk-name"></div>
-    <div class="dlg-text" id="dlg-text"></div>
-    <div class="click-hint">クリックして続ける ▼</div>
-  </div>
-  <div class="choice-overlay" id="choice-overlay" style="display:none">
-    <div class="choice-q" id="choice-q"></div>
-    <div class="choice-btns" id="choice-btns"></div>
-  </div>
-  <div class="result-panel" id="result-panel" style="display:none">
-    <div class="res-icon" id="res-icon"></div>
-    <div class="res-title" id="res-title"></div>
-    <div class="res-text" id="res-text"></div>
-    <div class="res-tip" id="res-tip" style="display:none"></div>
-    <button class="res-btn" id="res-btn"></button>
-  </div>
+  <div class="dialogue-box" id="dlg-box" onclick="handleClick()"><div class="spk-name" id="spk-name"></div><div class="dlg-text" id="dlg-text"></div><div class="click-hint">クリックして続ける ▼</div></div>
+  <div class="choice-overlay" id="choice-overlay" style="display:none"><div class="choice-q" id="choice-q"></div><div class="choice-btns" id="choice-btns"></div></div>
+  <div class="result-panel" id="result-panel" style="display:none"><div class="res-icon" id="res-icon"></div><div class="res-title" id="res-title"></div><div class="res-text" id="res-text"></div><div class="res-tip" id="res-tip" style="display:none"></div><button class="res-btn" id="res-btn"></button></div>
 </div>
 
 <div class="screen" id="end-screen">
-  <div class="end-wrap">
-    <div class="end-title">🎊 修復完了！</div>
-    <div class="end-score" id="end-score"></div>
-    <div class="tips-box" id="tips-box"></div>
-    <div class="end-msg">3つの違う失敗を、それぞれ別の方法で修復できました。</div>
-    <button class="replay-btn" onclick="restartGame()">もう一度プレイする</button>
-  </div>
+  <div class="end-wrap"><div class="end-title">🎊 修復完了！</div><div class="end-score" id="end-score"></div><div class="tips-box" id="tips-box"></div><div class="end-msg">3つの違う失敗を、それぞれ別の方法で修復できました。</div><button class="replay-btn" onclick="restartGame()">もう一度プレイする</button></div>
 </div>
 </div>
 
@@ -83,23 +60,8 @@ const SCENES = [
     failText: '失敗した！会話に入る直前からやり直せ。',
     choiceQ: '⚡ やり直し：Cさんはどう入る？',
     choices: [
-      {
-        type:'bad', label:'「妹と最近どうなん」', sub:'文脈確認なしで乱入する',
-        after:[
-          { spk:'Cさん', side:'R', text:'妹と最近どうなん' },
-          { spk:'Aさん', side:'L', text:'いや、今その話してないけど……' }
-        ],
-        rewind:'失敗した！また話題を壊した。やり直せ。'
-      },
-      {
-        type:'good', label:'「今の話、入ってもいい？」', sub:'話題確認と参加許可をする',
-        after:[
-          { spk:'Cさん', side:'R', text:'今、授業の発表について話してた？ 途中から聞こえたんだけど、入ってもいい？' },
-          { spk:'Aさん', side:'L', text:'うん、コミュニケーション不全の例を考えてた。' },
-          { spk:'Bさん', side:'L', text:'入って大丈夫。何か案ある？' }
-        ],
-        tip:'💡 修復：途中参加では、まず話題確認と参加許可をする。乱入ではなく参加になる。'
-      }
+      { type:'bad', label:'「妹と最近どうなん」', sub:'文脈確認なしで乱入する', after:[{ spk:'Cさん', side:'R', text:'妹と最近どうなん' },{ spk:'Aさん', side:'L', text:'いや、今その話してないけど……' }], rewind:'失敗した！また話題を壊した。やり直せ。' },
+      { type:'good', label:'「今の話、入ってもいい？」', sub:'話題確認と参加許可をする', after:[{ spk:'Cさん', side:'R', text:'今、授業の発表について話してた？ 途中から聞こえたんだけど、入ってもいい？' },{ spk:'Aさん', side:'L', text:'うん、コミュニケーション不全の例を考えてた。' },{ spk:'Bさん', side:'L', text:'入って大丈夫。何か案ある？' }], tip:'💡 修復：途中参加では、まず話題確認と参加許可をする。乱入ではなく参加になる。' }
     ]
   },
   {
@@ -118,58 +80,28 @@ const SCENES = [
     failText: '失敗した！作業を頼む直前からやり直せ。',
     choiceQ: '⚡ やり直し：Aさんはどう頼む？',
     choices: [
-      {
-        type:'bad', label:'「発表で困らない感じで」', sub:'完成条件を曖昧にしたまま頼む',
-        after:[
-          { spk:'Aさん', side:'L', text:'発表で困らない感じでお願い。' },
-          { spk:'Bさん', side:'R', text:'だから、その困らない感じが分からない……' }
-        ],
-        rewind:'失敗した！曖昧なまま押し付けた。やり直せ。'
-      },
-      {
-        type:'good', label:'「担当・期限・完成条件」を言う', sub:'何をどこまでやるか明確にする',
-        after:[
-          { spk:'Aさん', side:'L', text:'ごめん、先に帰るから、Bさんはスライド3〜5枚目の文章を短くして、今日20時までに共有してくれる？ 画像探しは俺が帰ってからやる。' },
-          { spk:'Bさん', side:'R', text:'それなら分かる。文章の整理だけ今日20時までね。' },
-          { spk:'Aさん', side:'L', text:'ありがとう。終わったらチャットに送って。確認する。' }
-        ],
-        tip:'💡 修復：依頼では「担当・期限・完成条件」を言う。いい感じ、任せる、適当に、はズレやすい。'
-      }
+      { type:'bad', label:'「発表で困らない感じで」', sub:'完成条件を曖昧にしたまま頼む', after:[{ spk:'Aさん', side:'L', text:'発表で困らない感じでお願い。' },{ spk:'Bさん', side:'R', text:'だから、その困らない感じが分からない……' }], rewind:'失敗した！曖昧なまま押し付けた。やり直せ。' },
+      { type:'good', label:'「担当・期限・完成条件」を言う', sub:'何をどこまでやるか明確にする', after:[{ spk:'Aさん', side:'L', text:'ごめん、先に帰るから、Bさんはスライド3〜5枚目の文章を短くして、今日20時までに共有してくれる？ 画像探しは俺が帰ってからやる。' },{ spk:'Bさん', side:'R', text:'それなら分かる。文章の整理だけ今日20時までね。' },{ spk:'Aさん', side:'L', text:'ありがとう。終わったらチャットに送って。確認する。' }], tip:'💡 修復：依頼では「担当・期限・完成条件」を言う。いい感じ、任せる、適当に、はズレやすい。' }
     ]
   },
   {
-    title: 'ステージ3：本番中の決めつけ',
-    location: '📍 発表本番　質疑応答',
+    title: 'ステージ3：発表中の助け方ミス',
+    location: '📍 発表本番　前に出て発表中',
     bg: 'linear-gradient(180deg,#20102a 0%,#120817 65%,#07030a 100%)',
-    chars: { L: { emoji:'🎤', name:'発表チーム' }, R: { emoji:'🙋', name:'質問者' } },
+    chars: { L: { emoji:'👩‍🏫', name:'Bさん' }, R: { emoji:'🧑', name:'Aさん' } },
     dialogues: [
-      { spk:'質問者', side:'R', text:'Cさんの発言って、ふざけているだけに見える人もいると思うんですが、その違いはどう説明しますか？' },
-      { spk:'Aさん', side:'L', text:'つまり、Cさんが悪いってことですよね。' },
-      { spk:'質問者', side:'R', text:'いや、そういう意味ではなくて……' },
-      { spk:'Bさん', side:'L', text:'ちょっと待って、質問の意図と違うかも。' },
-      { spk:'Aさん', side:'L', text:'でも時間ないし、次いこう。' },
-      { spk:'観客', side:'R', text:'……質問への答えになってない。' }
+      { spk:'Bさん', side:'L', text:'えっと、この場面では……相手の……えー……' },
+      { spk:'Aさん', side:'R', text:'そこ違う。もういい、俺が説明する。' },
+      { spk:'Bさん', side:'L', text:'え……' },
+      { spk:'Aさん', side:'R', text:'これは文脈を確認しないと会話が止まる、という話です。' },
+      { spk:'Bさん', side:'L', text:'……' },
+      { spk:'観客', side:'R', text:'助けたというより、発表を奪った感じになってる……' }
     ],
-    failText: '失敗した！質問に答える直前からやり直せ。',
-    choiceQ: '⚡ やり直し：Aさんはどう答える？',
+    failText: '失敗した！Bさんが詰まった場面からやり直せ。',
+    choiceQ: '⚡ やり直し：Aさんはどう助ける？',
     choices: [
-      {
-        type:'bad', label:'「Cさんが悪い例です」', sub:'質問を単純化して決めつける',
-        after:[
-          { spk:'Aさん', side:'L', text:'Cさんが悪い例です。以上です。' },
-          { spk:'質問者', side:'R', text:'いや、そういう話ではなくて……' }
-        ],
-        rewind:'失敗した！相手の質問を決めつけた。やり直せ。'
-      },
-      {
-        type:'good', label:'「質問の意図を確認してから答える」', sub:'要約してズレを防ぐ',
-        after:[
-          { spk:'Aさん', side:'L', text:'質問は「ふざけているだけ」と「コミュニケーション不全の例」の違いですね。私たちは、相手に意図が伝わらず会話が止まる点を問題として扱いました。' },
-          { spk:'質問者', side:'R', text:'はい、その説明なら分かります。' },
-          { spk:'Bさん', side:'L', text:'改善例では、意図を言葉にすることで、同じ発言を教材として扱えるようにしました。' }
-        ],
-        tip:'💡 修復：質疑応答では、相手の質問を一度要約してから答える。決めつけるとズレる。'
-      }
+      { type:'bad', label:'「もういい、俺が説明する」', sub:'相手を否定して発表を奪う', after:[{ spk:'Aさん', side:'R', text:'もういい、俺が説明する。' },{ spk:'Bさん', side:'L', text:'……' }], rewind:'失敗した！相手を助けずに発表を奪った。やり直せ。' },
+      { type:'good', label:'「補足すると〜です」', sub:'相手の発表を残したまま助ける', after:[{ spk:'Aさん', side:'R', text:'補足すると、この場面では「相手の話題を確認せずに入る」と会話が止まりやすい、という例です。' },{ spk:'Bさん', side:'L', text:'そうです。なので、改善後は最初に「今の話に入ってもいい？」と確認します。' },{ spk:'Aさん', side:'R', text:'Bさんの説明に付け加えると、相手の立場を残したまま話すことも大事です。' }], tip:'💡 修復：相手が詰まったときは、否定して奪うのではなく「補足」として助ける。相手の発表者としての立場を残す。' }
     ]
   }
 ];
